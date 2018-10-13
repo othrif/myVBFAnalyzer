@@ -25,8 +25,6 @@ class TProofOutputFile;
 class analyze : public TSelector {
    public :
 
-   bool doDetail=true; //!
-
    std::map<TString, TH1F*> histo; //!
    TProofOutputFile *m_prooffile; //!
    TFile *m_outfile; //!
@@ -62,27 +60,39 @@ class analyze : public TSelector {
    TTreeReaderValue<Float_t> met_tst_nolep_et = {fReader, "met_tst_nolep_et"};
    TTreeReaderValue<Float_t> met_tst_phi = {fReader, "met_tst_phi"};
    TTreeReaderValue<Float_t> met_tst_nolep_phi = {fReader, "met_tst_nolep_phi"};
-   TTreeReaderArray<float> mu_charge = {fReader, "mu_charge"};
-   TTreeReaderArray<float> mu_pt = {fReader, "mu_pt"};
-   TTreeReaderArray<float> el_charge = {fReader, "el_charge"};
-   TTreeReaderArray<float> el_pt = {fReader, "el_pt"};
-   TTreeReaderArray<float> jet_pt = {fReader, "jet_pt"};
-   TTreeReaderArray<float> jet_timing = {fReader, "jet_timing"};
-   TTreeReaderArray<float> mu_phi = {fReader, "mu_phi"};
-   TTreeReaderArray<float> el_phi = {fReader, "el_phi"};
-   TTreeReaderArray<float> mu_eta = {fReader, "mu_eta"};
-   TTreeReaderArray<float> el_eta = {fReader, "el_eta"};
-   TTreeReaderArray<float> jet_phi = {fReader, "jet_phi"};
-   TTreeReaderArray<float> jet_eta = {fReader, "jet_eta"};
+
+   TTreeReaderValue<Float_t> j1_pt = {fReader, "j1_pt"};
+   TTreeReaderValue<Float_t> j2_pt = {fReader, "j2_pt"};
+   TTreeReaderValue<Float_t> j3_pt = {fReader, "j3_pt"};
+   TTreeReaderValue<Float_t> j1_eta = {fReader, "j1_eta"};
+   TTreeReaderValue<Float_t> j2_eta = {fReader, "j2_eta"};
+   TTreeReaderValue<Float_t> j3_eta = {fReader, "j3_eta"};
+   TTreeReaderValue<Float_t> j1_phi = {fReader, "j1_phi"};
+   TTreeReaderValue<Float_t> j2_phi = {fReader, "j2_phi"};
+   TTreeReaderValue<Float_t> j3_phi = {fReader, "j3_phi"};
+   TTreeReaderValue<Float_t> mu1_pt = {fReader, "mu1_pt"};
+   TTreeReaderValue<Float_t> mu2_pt = {fReader, "mu2_pt"};
+   TTreeReaderValue<Float_t> el1_pt = {fReader, "el1_pt"};
+   TTreeReaderValue<Float_t> el2_pt = {fReader, "el2_pt"};
+   TTreeReaderValue<Int_t> mu1_charge = {fReader, "mu1_charge"};
+   TTreeReaderValue<Int_t> mu2_charge = {fReader, "mu2_charge"};
+   TTreeReaderValue<Int_t> el1_charge = {fReader, "el1_charge"};
+   TTreeReaderValue<Int_t> el2_charge = {fReader, "el2_charge"};
+   TTreeReaderValue<Float_t> mll = {fReader, "mll"};
    TTreeReaderValue<Float_t> met_significance = {fReader, "met_significance"};
-/*   TTreeReaderValue<Float_t> GenMET_pt = {fReader, "GenMET_pt"};
+   TTreeReaderValue<Float_t> averageIntPerXing = {fReader, "averageIntPerXing"};
+   TTreeReaderValue<Int_t> isSR = {fReader, "isSR"};
+   TTreeReaderValue<Int_t> isCRWep = {fReader, "isCRWep"};
+   TTreeReaderValue<Int_t> isCRWen = {fReader, "isCRWen"};
+   TTreeReaderValue<Int_t> isCRWepLowSig = {fReader, "isCRWepLowSig"};
+   TTreeReaderValue<Int_t> isCRWenLowSig = {fReader, "isCRWenLowSig"};
+   TTreeReaderValue<Int_t> isCRWmp = {fReader, "isCRWmp"};
+   TTreeReaderValue<Int_t> isCRWmn = {fReader, "isCRWmn"};
+   TTreeReaderValue<Int_t> isCRZee = {fReader, "isCRZee"};
+   TTreeReaderValue<Int_t> isCRZmm = {fReader, "isCRZmm"};
    TTreeReaderValue<Float_t> met_truth_et = {fReader, "met_truth_et"};
    TTreeReaderValue<Float_t> met_truth_sumet = {fReader, "met_truth_sumet"};
-   TTreeReaderArray<float> truth_jet_pt = {fReader, "truth_jet_pt"};
-   TTreeReaderArray<float> truth_jet_eta = {fReader, "truth_jet_eta"};
-   TTreeReaderArray<float> truth_jet_phi = {fReader, "truth_jet_phi"};
-   TTreeReaderArray<float> truth_jet_m = {fReader, "truth_jet_m"};
-   TTreeReaderValue<Double_t> truth_jj_mass = {fReader, "truth_jj_mass"};*/
+   TTreeReaderValue<Double_t> truth_jj_mass = {fReader, "truth_jj_mass"};
 
 
    analyze(TTree * /*tree*/ =0) { }

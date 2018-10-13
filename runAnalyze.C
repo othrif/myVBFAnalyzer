@@ -12,8 +12,7 @@
   p.Start();
   TChain * chain = new TChain("", "");
   TString directory = "/Users/othmanerifki/vbf/plot/v11Rui/";
-  chain->Add("/Users/othmanerifki/vbf/relComp/input/raw_vbf_rel21.root/VBFH125Nominal");
-//  chain->Add(directory + "data.root/dataNominal");
+  chain->Add("/Users/othmanerifki/vbf/samples/v11/131018/All/VBFH125Nominal308276.root/VBFH125Nominal");
 
    //Processing
   TString entries = TString::Format("%lld", chain->GetEntries());
