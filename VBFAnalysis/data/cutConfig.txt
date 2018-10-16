@@ -1,0 +1,6 @@
+Cut,start,step,nLow,nHigh
+jj_mass,1e6,4e5,0,6
+met_tst_et,180e3,20e3,0,0
+jj_deta,4.8,0.3,0,0
+jj_dphi,1.8,0.2,0,0
+n_jet,2,0,0,0
