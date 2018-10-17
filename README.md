@@ -29,7 +29,8 @@ acmSetup
 
 - Create the normalization file:
 ```bash
-ls -d ParentDir/vXX/* > samples
+ls -d /nfs/dust/atlas/user/othrif/samples/MiniNtuples/vXX/*.root > samples
+
 getN.py -l samples
 ```
 If you want to examine sum of weights of a dsid in the file `h_total->GetBinContent(h_total->GetXaxis()->FindBin("308276"))`
@@ -53,7 +54,7 @@ mergeVBFAnalysisAlg.sh dir/rootFiles
 - Create input for plotting
 ``` bash
 mkdir Plots
-cd ../Plots
+cd Plots
 ls FullPath/dir/rootFiles/merged/* > input.txt
 makeInput.py --syst Nominal
 ```

@@ -102,38 +102,38 @@ void plotEvents::Loop(TString sys)
 
        if(!passJetCleanTight) continue;
 	   if(!Cut(jentry)) continue;
-         
-    
+
+
            //TODO make the lines below reduandent with cutflowHists()
-           
+
         // Save event in the right histograms. Region, Systematic, Process
         if(n_el==0 && n_mu==0 && trigger_met) plotEvents::fillHists("sr", "nn");
-        if(n_el==1 && n_mu==0 && trigger_lep && el_pt->at(0)>30.e3 && met_significance>4.){
+        if(n_el==1 && n_mu==0 && trigger_lep && el1_pt>30.e3 && met_significance>4.){
             plotEvents::fillHists("wcr", "e");
             plotEvents::fillHists("wcr", "l");
-            if(el_charge->at(0)==-1) plotEvents::fillHists("wcr", "en");
-            if(el_charge->at(0)==1) plotEvents::fillHists("wcr", "ep");
+            if(el1_charge==-1) plotEvents::fillHists("wcr", "en");
+            if(el1_charge==1) plotEvents::fillHists("wcr", "ep");
         }
-        if(n_el==0 && n_mu==1 && trigger_lep && mu_pt->at(0)>30.e3){
+        if(n_el==0 && n_mu==1 && trigger_lep && mu1_pt>30.e3){
             plotEvents::fillHists("wcr", "u");
             plotEvents::fillHists("wcr", "l");
-            if(mu_charge->at(0)==-1) plotEvents::fillHists("wcr", "un");
-            if(mu_charge->at(0)==1) plotEvents::fillHists("wcr", "up"); 
+            if(mu1_charge==-1) plotEvents::fillHists("wcr", "un");
+            if(mu1_charge==1) plotEvents::fillHists("wcr", "up");
         }
-        if(n_el==2 && n_mu==0 && trigger_lep && el_pt->at(0)>30.e3 && el_pt->at(1)>7.e3){
+        if(n_el==2 && n_mu==0 && trigger_lep && el1_pt>30.e3 && el2_pt>7.e3){
 	   TLorentzVector e1,e2;
-	   e1.SetPtEtaPhiM(el_pt->at(0), el_eta->at(0), el_phi->at(0), 0.511);
-	   e2.SetPtEtaPhiM(el_pt->at(1), el_eta->at(1), el_phi->at(1), 0.511);
+	   e1.SetPtEtaPhiM(el1_pt, el1_eta, el1_phi, 0.511);
+	   e2.SetPtEtaPhiM(el2_pt, el2_eta, el2_phi, 0.511);
 	   double mll=(e1+e2).M();
 	   if(TMath::Abs(mll-91.2e3)<25.e3){
             plotEvents::fillHists("zcr", "ll");
             plotEvents::fillHists("zcr", "ee");
            }
         }
-        if(n_el==0 && n_mu==2 && trigger_lep && mu_pt->at(0)>30.e3 && mu_pt->at(1)>7.e3){
+        if(n_el==0 && n_mu==2 && trigger_lep && mu1_pt>30.e3 && mu2_pt>7.e3){
 	   TLorentzVector m1,m2;
-	   m1.SetPtEtaPhiM(mu_pt->at(0), mu_eta->at(0), mu_phi->at(0), 105.6);
-	   m2.SetPtEtaPhiM(mu_pt->at(1), mu_eta->at(1), mu_phi->at(1), 105.6);
+	   m1.SetPtEtaPhiM(mu1_pt, mu1_eta, mu1_phi, 105.6);
+	   m2.SetPtEtaPhiM(mu2_pt, mu2_eta, mu2_phi, 105.6);
 	   double mll=(m1+m2).M();
 	   if(TMath::Abs(mll-91.2e3)<25.e3) {
             plotEvents::fillHists("zcr", "ll");

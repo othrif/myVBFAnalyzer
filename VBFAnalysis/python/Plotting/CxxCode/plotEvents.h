@@ -32,7 +32,6 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
-   TString         outFile;
    Float_t         w;
    Int_t           runNumber;
    ULong64_t       eventNumber;
@@ -42,7 +41,6 @@ public :
    Int_t           n_jet;
    Int_t           n_el;
    Int_t           n_mu;
-   Double_t        lumi;
    Double_t        jj_mass;
    Double_t        jj_deta;
    Double_t        jj_dphi;
@@ -51,32 +49,39 @@ public :
    Double_t        met_tst_nolep_j1_dphi;
    Double_t        met_tst_nolep_j2_dphi;
    Float_t         met_tst_et;
-   Double_t         met_cst_jet;
+   Double_t        met_cst_jet;
    Float_t         met_tst_nolep_et;
    Float_t         met_tst_phi;
    Float_t         met_tst_nolep_phi;
-   vector<float>   *mu_charge;
-   vector<float>   *mu_pt;
-   vector<float>   *el_charge;
-   vector<float>   *el_pt;
-   vector<float>   *jet_pt;
-   vector<float>   *jet_timing;
-   vector<float>   *mu_phi;
-   vector<float>   *el_phi;
-   vector<float>   *mu_eta;
-   vector<float>   *el_eta;
-   vector<float>   *jet_phi;
-   vector<float>   *jet_eta;
+   Float_t         j1_pt;
+   Float_t         j2_pt;
+   Float_t         j3_pt;
+   Float_t         j1_eta;
+   Float_t         j2_eta;
+   Float_t         j3_eta;
+   Float_t         j1_phi;
+   Float_t         j2_phi;
+   Float_t         j3_phi;
+   Float_t         mu1_pt;
+   Float_t         mu2_pt;
+   Float_t         el1_pt;
+   Float_t         el2_pt;
+   Int_t           mu1_charge;
+   Int_t           mu2_charge;
+   Int_t           el1_charge;
+   Int_t           el2_charge;
+   Float_t         mll;
    Float_t         met_significance;
-   Bool_t          SR;
-   Bool_t          CRWep;
-   Bool_t          CRWen;
-   Bool_t          CRWepLowSig;
-   Bool_t          CRWenLowSig;
-   Bool_t          CRWmp;
-   Bool_t          CRWmn;
-   Bool_t          CRZee;
-   Bool_t          CRZmm;
+   Float_t         averageIntPerXing;
+   Int_t           isSR;
+   Int_t           isCRWep;
+   Int_t           isCRWen;
+   Int_t           isCRWepLowSig;
+   Int_t           isCRWenLowSig;
+   Int_t           isCRWmp;
+   Int_t           isCRWmn;
+   Int_t           isCRZee;
+   Int_t           isCRZmm;
 
    // List of branches
    TBranch        *b_w;   //!
@@ -100,28 +105,35 @@ public :
    TBranch        *b_met_tst_nolep_et;   //!
    TBranch        *b_met_tst_phi;   //!
    TBranch        *b_met_tst_nolep_phi;   //!
-   TBranch        *b_mu_charge;   //!
-   TBranch        *b_mu_pt;   //!
-   TBranch        *b_el_charge;   //!
-   TBranch        *b_el_pt;   //!
-   TBranch        *b_jet_pt;   //!
-   TBranch        *b_jet_timing;   //!
-   TBranch        *b_mu_phi;   //!
-   TBranch        *b_el_phi;   //!
-   TBranch        *b_mu_eta;   //!
-   TBranch        *b_el_eta;   //!
-   TBranch        *b_jet_phi;   //!
-   TBranch        *b_jet_eta;   //!
+   TBranch        *b_j1_pt;   //!
+   TBranch        *b_j2_pt;   //!
+   TBranch        *b_j3_pt;   //!
+   TBranch        *b_j1_eta;   //!
+   TBranch        *b_j2_eta;   //!
+   TBranch        *b_j3_eta;   //!
+   TBranch        *b_j1_phi;   //!
+   TBranch        *b_j2_phi;   //!
+   TBranch        *b_j3_phi;   //!
+   TBranch        *b_mu1_pt;   //!
+   TBranch        *b_mu2_pt;   //!
+   TBranch        *b_el1_pt;   //!
+   TBranch        *b_el2_pt;   //!
+   TBranch        *b_mu1_charge;   //!
+   TBranch        *b_mu2_charge;   //!
+   TBranch        *b_el1_charge;   //!
+   TBranch        *b_el2_charge;   //!
+   TBranch        *b_mll;   //!
    TBranch        *b_met_significance;   //!
-   TBranch        *b_SR;   //!
-   TBranch        *b_CRWep;   //!
-   TBranch        *b_CRWen;   //!
-   TBranch        *b_CRWepLowSig;   //!
-   TBranch        *b_CRWenLowSig;   //!
-   TBranch        *b_CRWmp;   //!
-   TBranch        *b_CRWmn;   //!
-   TBranch        *b_CRZee;   //!
-   TBranch        *b_CRZmm;   //!
+   TBranch        *b_averageIntPerXing;   //!
+   TBranch        *b_isSR;   //!
+   TBranch        *b_isCRWep;   //!
+   TBranch        *b_isCRWen;   //!
+   TBranch        *b_isCRWepLowSig;   //!
+   TBranch        *b_isCRWenLowSig;   //!
+   TBranch        *b_isCRWmp;   //!
+   TBranch        *b_isCRWmn;   //!
+   TBranch        *b_isCRZee;   //!
+   TBranch        *b_isCRZmm;   //!
 
    plotEvents(TTree *tree=0, Double_t lumii=36100., TString="out.root", TString sys="Nominal");
    virtual ~plotEvents();
@@ -215,7 +227,7 @@ void plotEvents::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("w", &w, &b_w);
+  fChain->SetBranchAddress("w", &w, &b_w);
    fChain->SetBranchAddress("runNumber", &runNumber, &b_runNumber);
    fChain->SetBranchAddress("eventNumber", &eventNumber, &b_eventNumber);
    fChain->SetBranchAddress("trigger_met", &trigger_met, &b_trigger_met);
@@ -236,28 +248,35 @@ void plotEvents::Init(TTree *tree)
    fChain->SetBranchAddress("met_tst_nolep_et", &met_tst_nolep_et, &b_met_tst_nolep_et);
    fChain->SetBranchAddress("met_tst_phi", &met_tst_phi, &b_met_tst_phi);
    fChain->SetBranchAddress("met_tst_nolep_phi", &met_tst_nolep_phi, &b_met_tst_nolep_phi);
-   fChain->SetBranchAddress("mu_charge", &mu_charge, &b_mu_charge);
-   fChain->SetBranchAddress("mu_pt", &mu_pt, &b_mu_pt);
-   fChain->SetBranchAddress("el_charge", &el_charge, &b_el_charge);
-   fChain->SetBranchAddress("el_pt", &el_pt, &b_el_pt);
-   fChain->SetBranchAddress("jet_pt", &jet_pt, &b_jet_pt);
-   fChain->SetBranchAddress("jet_timing", &jet_timing, &b_jet_timing);
-   fChain->SetBranchAddress("mu_phi", &mu_phi, &b_mu_phi);
-   fChain->SetBranchAddress("el_phi", &el_phi, &b_el_phi);
-   fChain->SetBranchAddress("mu_eta", &mu_eta, &b_mu_eta);
-   fChain->SetBranchAddress("el_eta", &el_eta, &b_el_eta);
-   fChain->SetBranchAddress("jet_phi", &jet_phi, &b_jet_phi);
-   fChain->SetBranchAddress("jet_eta", &jet_eta, &b_jet_eta);
+   fChain->SetBranchAddress("j1_pt", &j1_pt, &b_j1_pt);
+   fChain->SetBranchAddress("j2_pt", &j2_pt, &b_j2_pt);
+   fChain->SetBranchAddress("j3_pt", &j3_pt, &b_j3_pt);
+   fChain->SetBranchAddress("j1_eta", &j1_eta, &b_j1_eta);
+   fChain->SetBranchAddress("j2_eta", &j2_eta, &b_j2_eta);
+   fChain->SetBranchAddress("j3_eta", &j3_eta, &b_j3_eta);
+   fChain->SetBranchAddress("j1_phi", &j1_phi, &b_j1_phi);
+   fChain->SetBranchAddress("j2_phi", &j2_phi, &b_j2_phi);
+   fChain->SetBranchAddress("j3_phi", &j3_phi, &b_j3_phi);
+   fChain->SetBranchAddress("mu1_pt", &mu1_pt, &b_mu1_pt);
+   fChain->SetBranchAddress("mu2_pt", &mu2_pt, &b_mu2_pt);
+   fChain->SetBranchAddress("el1_pt", &el1_pt, &b_el1_pt);
+   fChain->SetBranchAddress("el2_pt", &el2_pt, &b_el2_pt);
+   fChain->SetBranchAddress("mu1_charge", &mu1_charge, &b_mu1_charge);
+   fChain->SetBranchAddress("mu2_charge", &mu2_charge, &b_mu2_charge);
+   fChain->SetBranchAddress("el1_charge", &el1_charge, &b_el1_charge);
+   fChain->SetBranchAddress("el2_charge", &el2_charge, &b_el2_charge);
+   fChain->SetBranchAddress("mll", &mll, &b_mll);
    fChain->SetBranchAddress("met_significance", &met_significance, &b_met_significance);
-   //fChain->SetBranchAddress("SR", &SR, &b_SR);
-   //fChain->SetBranchAddress("CRWep", &CRWep, &b_CRWep);
-   //fChain->SetBranchAddress("CRWen", &CRWen, &b_CRWen);
-   //fChain->SetBranchAddress("CRWepLowSig", &CRWepLowSig, &b_CRWepLowSig);
-   //fChain->SetBranchAddress("CRWenLowSig", &CRWenLowSig, &b_CRWenLowSig);
-   //fChain->SetBranchAddress("CRWmp", &CRWmp, &b_CRWmp);
-   //fChain->SetBranchAddress("CRWmn", &CRWmn, &b_CRWmn);
-   //fChain->SetBranchAddress("CRZee", &CRZee, &b_CRZee);
-   //fChain->SetBranchAddress("CRZmm", &CRZmm, &b_CRZmm);
+   fChain->SetBranchAddress("averageIntPerXing", &averageIntPerXing, &b_averageIntPerXing);
+   fChain->SetBranchAddress("isSR", &isSR, &b_isSR);
+   fChain->SetBranchAddress("isCRWep", &isCRWep, &b_isCRWep);
+   fChain->SetBranchAddress("isCRWen", &isCRWen, &b_isCRWen);
+   fChain->SetBranchAddress("isCRWepLowSig", &isCRWepLowSig, &b_isCRWepLowSig);
+   fChain->SetBranchAddress("isCRWenLowSig", &isCRWenLowSig, &b_isCRWenLowSig);
+   fChain->SetBranchAddress("isCRWmp", &isCRWmp, &b_isCRWmp);
+   fChain->SetBranchAddress("isCRWmn", &isCRWmn, &b_isCRWmn);
+   fChain->SetBranchAddress("isCRZee", &isCRZee, &b_isCRZee);
+   fChain->SetBranchAddress("isCRZmm", &isCRZmm, &b_isCRZmm);
    Notify();
 }
 
@@ -293,9 +312,9 @@ bool plotEvents::fillSR(){
    fillCutflow("sr", "nn", 1);
    if(n_jet!=2) return 0;
    fillCutflow("sr", "nn", 2);
-   if(jet_pt->at(0)<80e3) return 0;
+   if(jet1_pt<80e3) return 0;
    fillCutflow("sr", "nn", 3);
-   if(jet_pt->at(1)<50e3) return 0;
+   if(jet2_pt<50e3) return 0;
    fillCutflow("sr", "nn", 4);
    if(jj_mass<1e6) return 0;
    fillCutflow("sr", "nn", 5);
@@ -326,21 +345,21 @@ bool plotEvents::fillZCR(TString leptons){
    double lep1, lep2, mll;
    bool SFOS;
    if(leptons=="ee" && n_el==2){
-      lep1=el_pt->at(0);
-      lep2=el_pt->at(1);
-      SFOS=el_charge->at(0)!=el_charge->at(1);
+      lep1=el1_pt;
+      lep2=el2_pt;
+      SFOS=el1_charge!=el2_charge;
 	   TLorentzVector e1,e2;
-	   e1.SetPtEtaPhiM(el_pt->at(0), el_eta->at(0), el_phi->at(0), 0.511);
-	   e2.SetPtEtaPhiM(el_pt->at(1), el_eta->at(1), el_phi->at(1), 0.511);
+	   e1.SetPtEtaPhiM(el1_pt, el1_eta, el1_phi, 0.511);
+	   e2.SetPtEtaPhiM(el2_pt, el2_eta, el2_phi, 0.511);
 	   mll=(e1+e2).M();
    }
    else if(leptons=="uu" && n_mu==2){
-      lep1=mu_pt->at(0);
-      lep2=mu_pt->at(1);
-      SFOS=mu_charge->at(0)!=mu_charge->at(1);
+      lep1=mu1_pt;
+      lep2=mu2_pt;
+      SFOS=mu1_charge!=mu2_charge;
 	   TLorentzVector m1,m2;
-	   m1.SetPtEtaPhiM(mu_pt->at(0), mu_eta->at(0), mu_phi->at(0), 105.6);
-	   m2.SetPtEtaPhiM(mu_pt->at(1), mu_eta->at(1), mu_phi->at(1), 105.6);
+	   m1.SetPtEtaPhiM(mu1_pt, mu1_eta, mu1_phi, 105.6);
+	   m2.SetPtEtaPhiM(mu2_pt, mu2_eta, mu2_phi, 105.6);
 	   mll=(m1+m2).M();
    }
    else{
@@ -354,9 +373,9 @@ bool plotEvents::fillZCR(TString leptons){
    fillCutflow("zcr", leptons, 1);
    if(n_jet!=2) return 0;
    fillCutflow("zcr", leptons, 2);
-   if(jet_pt->at(0)<80e3) return 0;
+   if(jet1_pt<80e3) return 0;
    fillCutflow("zcr", leptons, 3);
-   if(jet_pt->at(1)<50e3) return 0;
+   if(jet2_pt<50e3) return 0;
    fillCutflow("zcr", leptons, 4);
    if(jj_mass<1e6) return 0;
    fillCutflow("zcr", leptons, 5);
@@ -395,14 +414,14 @@ bool plotEvents::fillZCR(TString leptons){
 bool plotEvents::fillWCR(TString leptons){
    double lep1, met_sig, charge;
    if(leptons=="e" && n_el==1){
-      lep1=el_pt->at(0);
+      lep1=el1_pt;
       met_sig=met_significance;
-      charge=el_charge->at(0);
+      charge=el1_charge;
    }
    else if(leptons=="u" && n_mu==1){
-      lep1=mu_pt->at(0);
+      lep1=mu1_pt;
       met_sig=999;
-      charge=mu_charge->at(0);
+      charge=mu1_charge;
    }
    else{
       lep1=0;
@@ -416,10 +435,10 @@ bool plotEvents::fillWCR(TString leptons){
    if(n_jet!=2) return 0;
    fillCutflow("wcr", leptons+"p", 2);
    fillCutflow("wcr", leptons+"n", 2);
-   if(jet_pt->at(0)<80e3) return 0;
+   if(jet1_pt<80e3) return 0;
    fillCutflow("wcr", leptons+"p", 3);
    fillCutflow("wcr", leptons+"n", 3);
-   if(jet_pt->at(1)<50e3) return 0;
+   if(jet2_pt<50e3) return 0;
    fillCutflow("wcr", leptons+"p", 4);
    fillCutflow("wcr", leptons+"n", 4);
    if(jj_mass<1e6) return 0;
@@ -464,7 +483,7 @@ bool plotEvents::fillWCR(TString leptons){
    if(charge==1){
       fillCutflow("wcr", leptons+"p", 18);
       //plotEvents::fillHists("wcr",leptons+"p");
-   } 
+   }
    else {
       fillCutflow("wcr", leptons+"n", 18);
       //plotEvents::fillHists("wcr",leptons+"n");
@@ -479,7 +498,7 @@ void plotEvents::cutflowHists(){
    //if(fillWCR("u")) plotEvents::fillHists("wcr", "u");
    //if(fillZCR("ee")) plotEvents::fillHists("zcr", "ee");
    //if(fillZCR("uu")) plotEvents::fillHists("zcr", "uu");
-   
+
    fillSR();
    fillWCR("e");
    fillWCR("u");
@@ -497,7 +516,7 @@ bool plotEvents::Cut(Long64_t entry)
         }
    //CR
         else if((n_el>0 || n_mu>0) && trigger_lep){//TODO make plotting of low/high met_sig regions possible
-           if(n_mu==0 && n_el==1 && met_significance<4) return 0; 
+           if(n_mu==0 && n_el==1 && met_significance<4) return 0;
            if(jj_mass>1e6 && met_tst_nolep_et>180e3 && met_cst_jet>150e3 && met_tst_nolep_j1_dphi>1.0 && met_tst_nolep_j2_dphi>1.0 && n_jet == 2 && jj_dphi<1.8 && jj_deta>4.8) return 1;
         }
 
@@ -512,8 +531,8 @@ void plotEvents::fillHists(TString region, TString lep){
     ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jj_mass"))->Fill(jj_mass,helplumi*w);
     ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jj_dphi"))->Fill(jj_dphi,helplumi*w);
     ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jj_deta"))->Fill(jj_deta,helplumi*w);
-    ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jet1_pt"))->Fill(jet_pt->at(0),helplumi*w);
-    ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jet2_pt"))->Fill(jet_pt->at(1),helplumi*w);
+    ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jet1_pt"))->Fill(jet1_pt,helplumi*w);
+    ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/jet2_pt"))->Fill(jet2_pt,helplumi*w);
     ((TH1D*)fout->Get("pass_"+region+"_allmjj_"+lep+"_"+sys+"/plotEvent_"+process+"/met"))->Fill(met_tst_et,helplumi*w);
 }
 

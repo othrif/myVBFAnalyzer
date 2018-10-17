@@ -129,13 +129,21 @@ class VBFAnalysisAlg: public ::AthAnalysisAlgorithm {
   std::vector<Float_t>* el_eta;
 
   Float_t mu1_pt;
-  Float_t el1_pt;
+  Int_t   mu1_charge;
+  Float_t mu1_eta;
+  Float_t mu1_phi;
   Float_t mu2_pt;
+  Int_t   mu2_charge;
+  Float_t mu2_eta;
+  Float_t mu2_phi;
+  Float_t el1_pt;
+  Int_t   el1_charge;
+  Float_t el1_eta;
+  Float_t el1_phi;
   Float_t el2_pt;
-  Int_t el1_charge;
-  Int_t mu1_charge;
-  Int_t el2_charge;
-  Int_t mu2_charge;
+  Int_t   el2_charge;
+  Float_t el2_eta;
+  Float_t el2_phi;
   Float_t mll;
 
   std::vector<Float_t>* jet_pt;

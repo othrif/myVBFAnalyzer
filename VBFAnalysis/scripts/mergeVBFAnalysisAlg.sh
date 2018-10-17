@@ -1,4 +1,8 @@
-#!/bin/bash                                                                                                                                                                                                       
+#!/bin/bash       
+                                                                                         
+export inputDir=$1                                                                                         
+export here=$PWD
+cd ${inputDir}              
 mkdir merged
 
 #hadd merged/data.root data*root
@@ -34,3 +38,5 @@ if [ $(ls | grep VH125.*.root | wc -l) == 0 ] ;then echo "WARNING: (VH125*.root)
 
 #haddmerged/ signal.root *H125*root
 #haddmerged/ VV_VVV.root VV*root
+
+cd $here

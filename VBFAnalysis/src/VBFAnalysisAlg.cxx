@@ -89,6 +89,14 @@ StatusCode VBFAnalysisAlg::initialize() {
   m_tree_out->Branch("mu2_pt",&mu2_pt);
   m_tree_out->Branch("el1_pt",&el1_pt);
   m_tree_out->Branch("el2_pt",&el2_pt);
+    m_tree_out->Branch("mu1_eta",&mu1_eta);
+  m_tree_out->Branch("mu2_eta",&mu2_eta);
+  m_tree_out->Branch("el1_eta",&el1_eta);
+  m_tree_out->Branch("el2_eta",&el2_eta);
+    m_tree_out->Branch("mu1_phi",&mu1_phi);
+  m_tree_out->Branch("mu2_phi",&mu2_phi);
+  m_tree_out->Branch("el1_phi",&el1_phi);
+  m_tree_out->Branch("el2_phi",&el2_phi);
   m_tree_out->Branch("mu1_charge",&mu1_charge);
   m_tree_out->Branch("mu2_charge",&mu2_charge);
   m_tree_out->Branch("el1_charge",&el1_charge);
@@ -219,45 +227,55 @@ StatusCode VBFAnalysisAlg::execute() {
   ATH_MSG_DEBUG ("done with jets");
   // Leptons
   mll = -999.;
+  mu1_pt = -999.e3;
+  mu1_charge = -999.;
+  mu1_eta = -999.;
+  mu1_phi = -999.;
+  mu2_pt = -999.e3;
+  mu2_charge = -999.;
+  mu2_eta = -999.;
+  mu2_phi = -999.;
   el1_pt = -999.e3;
   el1_charge = -999.;
+  el1_eta = -999.;
+  el1_phi = -999.;
   el2_pt = -999.e3;
   el2_charge = -999.;
-  el1_pt = -999.e3;
-  el1_charge = -999.;
-  el2_pt = -999.e3;
-  el2_charge = -999.;
+  el2_eta = -999.;
+  el2_phi = -999.;
   TLorentzVector el_tlv[2];
   TLorentzVector mu_tlv[2];
   if(el_pt->size() > 0){
     el1_pt = el_pt->at(0);
     el1_charge = el_charge->at(0);
+    el1_eta = el_eta->at(0);
+    el1_phi = el_phi->at(0);
     if (el_pt->size() > 1){
       el2_pt = el_pt->at(1);
       el2_charge = el_charge->at(1);
+      el2_eta = el_eta->at(1);
+      el2_phi = el_phi->at(1);
       for(int i=0; i<2; i++)
         el_tlv[i].SetPtEtaPhiM(el_pt->at(i), el_eta->at(i), el_phi->at(i), electron_mass);
       TLorentzVector lep_sum = el_tlv[0] + el_tlv[1];
       mll = (lep_sum).M();
-    }
-    if(mu_pt->size() > 0){
-      ATH_MSG_WARNING("Something strange going on, Nel=" << el_pt->size() << ", Nmu=" << mu_pt->size() );
     }
   }
   ATH_MSG_DEBUG ("done with electrons");
   if(mu_pt->size() > 0){
     mu1_pt = mu_pt->at(0);
     mu1_charge = mu_charge->at(0);
+    mu1_eta = mu_eta->at(0);
+    mu1_phi = mu_phi->at(0);
     if (mu_pt->size() > 1){
       mu2_pt = mu_pt->at(1);
       mu2_charge = mu_charge->at(1);
+      mu2_eta = mu_eta->at(1);
+      mu2_phi = mu_phi->at(1);
       for(int i=0; i<2; i++)
         mu_tlv[i].SetPtEtaPhiM(mu_pt->at(i), mu_eta->at(i), mu_phi->at(i), muon_mass);
       TLorentzVector lep_sum = mu_tlv[0] + mu_tlv[1];
       mll = (lep_sum).M();
-    }
-    if(el_pt->size() > 0){
-      ATH_MSG_WARNING("Something strange going on, Nel=" << el_pt->size() << ", Nmu=" << mu_pt->size() );
     }
   }
     ATH_MSG_DEBUG ("done with muons");
