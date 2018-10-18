@@ -8,7 +8,6 @@ atlas_depends_on_subdirs( PUBLIC
                           Event/xAOD/xAODEventInfo
                           Event/xAOD/xAODJet
                           Event/xAOD/xAODMissingET
-#                          xAODAnaHelpers
                           PRIVATE
                           Event/xAOD/xAODEgamma
                           Event/xAOD/xAODMuon
@@ -25,23 +24,23 @@ atlas_add_library( VBFAnalysisLib src/*.cxx
                    PUBLIC_HEADERS VBFAnalysis
                    INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
                    LINK_LIBRARIES ${ROOT_LIBRARIES}
-                                    AthAnalysisBaseCompsLib
-				      AsgTools
-  xAODEgamma
-  xAODEventInfo
-  xAODJet
-  xAODMissingET
-  xAODMuon
-  xAODRootAccess
-  PathResolver
-  SUSYToolsLib 
+                   AthAnalysisBaseCompsLib
+				           AsgTools
+                   xAODEgamma
+                   xAODEventInfo
+                   xAODJet
+                   xAODMissingET
+                   xAODMuon
+                   xAODRootAccess
+                   PathResolver
+                   SUSYToolsLib
 )
 
 # if you add athena components (tools, algorithms) to this package
 # these lines are needed so you can configure them in joboptions
 atlas_add_component( VBFAnalysis src/components/*.cxx
                       NOCLIDDB
-                      LINK_LIBRARIES VBFAnalysisLib 
+                      LINK_LIBRARIES VBFAnalysisLib
 )
 
 # if you add an application (exe) to this package

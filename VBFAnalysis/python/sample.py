@@ -31,7 +31,11 @@ class sample(object):
                     self.runNumber = int(samplesplit[p+1])
                     self.runNumberS = samplesplit[p+1]
             if "MiniNtuple.root/user" in samplename:
-                self.subfileN = samplename.split(".")[-3]
+                self.subfileN = samplesplit[-3]
+                for seg in samplesplit:
+                    if "_00" in seg:
+                        self.subfileN = seg
+                        break
             if "physics_Main" in samplesplit:
                 self.isMC = False
             else:

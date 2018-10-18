@@ -27,10 +27,9 @@ acmSetup
 
 ## Run VBFAnalysisAlg ##
 
-- Create the normalization file:
+- Create the normalization file. Structure of files should be ("MiniNtuple.root/user" is mandatory): `ParentDir/user....MiniNtuple.root/user.....root`
 ```bash
 ls -d /nfs/dust/atlas/user/othrif/samples/MiniNtuples/vXX/*.root > samples
-
 getN.py -l samples
 ```
 If you want to examine sum of weights of a dsid in the file `h_total->GetBinContent(h_total->GetXaxis()->FindBin("308276"))`
@@ -70,3 +69,4 @@ Adding "--saveAs pdf" would save the plot as a pdf file
 ``` bash
 tables.py
 ```
+## Run VBFAnalysisAlg ##
