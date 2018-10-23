@@ -1,6 +1,8 @@
 void plot(){
 
-    TFile f("outFile.root");
+    //TFile f("outFile.root");
+    TString result = "../results/131018/";
+    TFile f(result+"jetClass.root");
     TH1F* h1 = (TH1F*) f.Get("jetClass_j80j50eta48"); h1->SetDirectory(0);
     TH1F* h2 = (TH1F*) f.Get("jetClass_j80j50eta2"); h2->SetDirectory(0);
     TH1F* h3 = (TH1F*) f.Get("jetClass_j40j40eta48"); h3->SetDirectory(0);
@@ -28,7 +30,7 @@ void plot(){
     l->AddEntry(h3,"|#eta_{jj}|>4.8, j1>40, j2>40","l");
     l->AddEntry(h4,"|#eta_{jj}|>2, j1>40, j2>40","l");
     l->Draw("same");
-    c->SaveAs("jetClass.pdf");
+    c->SaveAs(result+"jetClass.pdf");
 
     TCanvas *cEff = new TCanvas("cEff","cEff");
     hEff1->SetLineColor(kRed); hEff1->SetLineWidth(2);
@@ -47,7 +49,7 @@ void plot(){
     lEff->AddEntry(hEff3,"|#eta_{jj}|>4.8, j1>40, j2>40","l");
     lEff->AddEntry(hEff4,"|#eta_{jj}|>2, j1>40, j2>40","l");
     lEff->Draw("same");
-    c->SaveAs("jetClassEff.pdf");
+    cEff->SaveAs(result+"jetClassEff.pdf");
 
 
 }

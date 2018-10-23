@@ -11,8 +11,8 @@
   TStopwatch p;
   p.Start();
   TChain * chain = new TChain("", "");
-  TString directory = "/Users/othmanerifki/vbf/plot/v11Rui/";
-  chain->Add("/Users/othmanerifki/vbf/samples/v11/131018/All/VBFH125Nominal308276.root/VBFH125Nominal");
+  //chain->Add("/Users/othmanerifki/vbf/samples/v11/131018/All/VBFH125Nominal308276.root/VBFH125Nominal");
+  chain->Add("./input/processed_Z_strong_rel21.root/nominal");
 
    //Processing
   TString entries = TString::Format("%lld", chain->GetEntries());

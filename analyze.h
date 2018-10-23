@@ -25,6 +25,9 @@ class TProofOutputFile;
 class analyze : public TSelector {
    public :
 
+   //std::map<unsigned int, std::set<ULong64_t> > evtmap; //!
+   //bool unique; //!
+
    std::map<TString, TH1F*> histo; //!
    TProofOutputFile *m_prooffile; //!
    TFile *m_outfile; //!

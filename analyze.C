@@ -56,7 +56,17 @@ Bool_t analyze::Process(Long64_t entry)
    DefineRegions();
    FillHistograms(*w);
 
-   return kTRUE;
+   /*bool isMC = false;
+   if (!isMC) {
+      unique = (evtmap[*runNumber].insert(*eventNumber)).second;
+      if (!unique) {
+         Info("Process", "Warning: duplicate event in RunNb=%d", *runNumber);
+         return kTRUE;
+      }
+   }*/
+
+
+return kTRUE;
 }
 
 void analyze::SlaveTerminate()
@@ -69,9 +79,9 @@ void analyze::SlaveTerminate()
    for (auto lab : label_jetClass_hist){
       TString jetClasstmp = "jetClass_"+lab;
       TString jetClassEfftmp = "jetClassEff_"+lab;
-   for (int i=1; i<=4; i++)
-      histo[jetClassEfftmp]->SetBinContent(i,histo[jetClasstmp]->GetBinContent(i+2)/histo[jetClasstmp]->GetBinContent(2));
-}
+      for (int i=1; i<=4; i++)
+         histo[jetClassEfftmp]->SetBinContent(i,histo[jetClasstmp]->GetBinContent(i+2)/histo[jetClasstmp]->GetBinContent(2));
+   }
    // save
    m_outfile->Write();
    m_outfile->Close();
@@ -135,10 +145,10 @@ void analyze::DefineRegions()
 void analyze::FillHistograms(Float_t weight)
 {
 
-if(isRegion["SR"]){
-   histo["jj_mass"]->Fill(*jj_mass*1.e-3, weight);
-   histo["met_tst_et"]->Fill(*met_tst_et*1.e-3, weight);
-}
+   if(isRegion["SR"]){
+      histo["jj_mass"]->Fill(*jj_mass*1.e-3, weight);
+      histo["met_tst_et"]->Fill(*met_tst_et*1.e-3, weight);
+   }
 
    // Classify jets in the event if Central or Forward
    TString label_jetClass_hist[] = {"j80j50eta48","j80j50eta2","j40j40eta48","j40j40eta2"};
