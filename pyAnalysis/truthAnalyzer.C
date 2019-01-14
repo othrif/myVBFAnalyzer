@@ -31,7 +31,7 @@ void truthAnalyzer::SlaveBegin(TTree * /*tree*/)
  m_outfile = m_prooffile->OpenFile("RECREATE");
 
     //book minitree
- newtree = new TTree("nominal", option);
+ newtree = new TTree("nominal", filename);
  BookMinitree();
 }
 
