@@ -11,6 +11,7 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TProofOutputFile.h>
 #include <TSelector.h>
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
@@ -101,6 +102,7 @@ public :
    virtual TList  *GetOutputList() const { return fOutput; }
    virtual void    SlaveTerminate();
    virtual void    Terminate();
+   std::vector<std::string> getTokens(TString line, TString delim);
 
    ClassDef(truthAnalyzer,0);
 
@@ -131,6 +133,24 @@ Bool_t truthAnalyzer::Notify()
 
    return kTRUE;
 }
+
+std::vector<std::string> truthAnalyzer::getTokens(TString line, TString delim)
+{
+   std::vector<std::string> vtokens;
+   TObjArray *              tokens = TString(line).Tokenize(delim); // delimiters
+   if (tokens->GetEntriesFast()) {
+      TIter       iString(tokens);
+      TObjString *os = 0;
+      while ((os = (TObjString *)iString())) {
+         vtokens.push_back(os->GetString().Data());
+      }
+   }
+   delete tokens;
+
+   return vtokens;
+}
+
+
 
 
 #endif // #ifdef truthAnalyzer_cxx
