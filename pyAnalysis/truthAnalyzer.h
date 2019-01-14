@@ -16,11 +16,13 @@
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
 #include <TTreeReaderArray.h>
+#include <TLorentzVector.h>
 
 // Headers needed by this particular selector
 #include <vector>
 
-
+#define muon_mass             105.6583715   // in MeV
+#define electron_mass         0.510998928   // in MeV
 
 class truthAnalyzer : public TSelector {
 private :
@@ -39,8 +41,53 @@ public :
    void BookMinitree();
    void FillMinitree();
 
-   Double_t newtree_jj_mass;
-
+   Float_t         newtree_w;
+   UInt_t          newtree_runNumber;
+   ULong64_t       newtree_eventNumber;
+   Int_t           newtree_n_jet;
+   Int_t           newtree_n_el;
+   Int_t           newtree_n_mu;
+   Double_t        newtree_jj_mass;
+   Double_t        newtree_jj_deta;
+   Double_t        newtree_jj_dphi;
+   Double_t        newtree_met_tst_j1_dphi;
+   Double_t        newtree_met_tst_j2_dphi;
+   Double_t        newtree_met_tst_nolep_j1_dphi;
+   Double_t        newtree_met_tst_nolep_j2_dphi;
+   Double_t        newtree_met_cst_jet;
+   Float_t         newtree_met_tst_et;
+   Float_t         newtree_met_tst_nolep_et;
+   Float_t         newtree_met_tst_phi;
+   Float_t         newtree_met_tst_nolep_phi;
+   vector<float>   newtree_mu_charge;
+   vector<float>   newtree_mu_pt;
+   vector<float>   newtree_el_charge;
+   vector<float>   newtree_el_pt;
+   vector<float>   newtree_mu_phi;
+   vector<float>   newtree_el_phi;
+   vector<float>   newtree_mu_eta;
+   vector<float>   newtree_el_eta;
+   vector<Float_t> newtree_jet_pt;
+   vector<float>   newtree_jet_eta;
+   vector<float>   newtree_jet_phi;
+   vector<float>   newtree_jet_m;
+   vector<float>   newtree_jet_E;
+   vector<int>     newtree_jet_label;
+   Float_t         newtree_met_significance;
+   vector<float>   newtree_j3_centrality;
+   vector<float>   newtree_j3_dRj1;
+   vector<float>   newtree_j3_dRj2;
+   vector<float>   newtree_j3_minDR;
+   vector<float>   newtree_j3_mjclosest;
+   vector<float>   newtree_j3_min_mj;
+   vector<float>   newtree_j3_min_mj_over_mjj;
+   Float_t         newtree_mj34;
+   Float_t         newtree_max_j_eta;
+   Int_t           newtree_n_jet30;
+   Int_t           newtree_n_jet35;
+   Int_t           newtree_n_jet40;
+   Int_t           newtree_n_jet50;
+   Double_t        newtree_mll;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Float_t> w = {fReader, "w"};

@@ -47,6 +47,13 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
   else if ((fProcessed - 1) % 100000 == 0)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
+   // speed up
+  Bool_t toBeKept(kFALSE);
+  if(*n_jet > 1 && jet_pt[0] >= 50e3 && jet_pt[1] >= 80e3) toBeKept = kTRUE;
+  if(*jj_mass > 500e3 && *jj_deta>2.5 && *jj_dphi<2.4) toBeKept &= kTRUE;
+  if(*met_tst_et > 50e3 && *met_tst_nolep_et > 50e3) toBeKept &= kTRUE;
+  if (!toBeKept) return kTRUE;
+
   FillMinitree();
   newtree->Fill();
 
@@ -73,14 +80,95 @@ void truthAnalyzer::Terminate()
 
 void truthAnalyzer::BookMinitree()
 {
- newtree->Branch("jj_mass", &newtree_jj_mass);
+  newtree->Branch("w", &newtree_w);
+  newtree->Branch("runNumber", &newtree_runNumber);
+  newtree->Branch("eventNumber", &newtree_eventNumber);
+  newtree->Branch("jj_deta", &newtree_jj_deta);
+  newtree->Branch("jj_dphi", &newtree_jj_dphi);
+  newtree->Branch("jj_mass", &newtree_jj_mass);
+  newtree->Branch("n_jet", &newtree_n_jet);
+  newtree->Branch("n_jet30", &newtree_n_jet30);
+  newtree->Branch("n_jet35", &newtree_n_jet35);
+  newtree->Branch("n_jet40", &newtree_n_jet40);
+  newtree->Branch("n_jet50", &newtree_n_jet50);
+  newtree->Branch("jet_pt", &newtree_jet_pt);
+  newtree->Branch("jet_eta", &newtree_jet_eta);
+  newtree->Branch("met_tst_et", &newtree_met_tst_et);
+  newtree->Branch("met_tst_j1_dphi", &newtree_met_tst_j1_dphi);
+  newtree->Branch("met_tst_j2_dphi", &newtree_met_tst_j2_dphi);
+  newtree->Branch("met_tst_nolep_et", &newtree_met_tst_nolep_et);
+  newtree->Branch("met_tst_nolep_j1_dphi", &newtree_met_tst_nolep_j1_dphi);
+  newtree->Branch("met_tst_nolep_j2_dphi", &newtree_met_tst_nolep_j2_dphi);
+  newtree->Branch("n_el", &newtree_n_el);
+  newtree->Branch("el_pt", &newtree_el_pt);
+  newtree->Branch("el_charge", &newtree_el_charge);
+  newtree->Branch("n_mu", &newtree_n_mu);
+  newtree->Branch("mu_pt", &newtree_mu_pt);
+  newtree->Branch("mu_charge", &newtree_mu_charge);
+  newtree->Branch("mll", &newtree_mll);
+  newtree->Branch("met_significance", &newtree_met_significance);
 
- Info("SlaveBegin", "Booked minitree");
+  Info("SlaveBegin", "Booked minitree");
 }
 
 void truthAnalyzer::FillMinitree()
 {
 
+
+  // Processing
+  // Njets
+  int njet25=0, njet30=0, njet35=0, njet40=0, njet50=0;
+  for(auto j : jet_pt){
+    if(j > 25e3) njet25++;
+    if(j > 30e3) njet30++;
+    if(j > 35e3) njet35++;
+    if(j > 40e3) njet40++;
+    if(j > 50e3) njet50++;
+  }
+  // Mll
+  double mll_tmp=-1;
+  TLorentzVector el_tlv[2];
+  if (el_pt.GetSize() > 1){
+    for(int i=0; i<2; i++)
+      el_tlv[i].SetPtEtaPhiM(el_pt[i], el_eta[i], el_phi[i], electron_mass);
+    TLorentzVector lep_sum = el_tlv[0] + el_tlv[1];
+    mll_tmp = (lep_sum).M();
+  }
+  TLorentzVector mu_tlv[2];
+  if (mu_pt.GetSize() > 1){
+    for(int i=0; i<2; i++)
+      mu_tlv[i].SetPtEtaPhiM(mu_pt[i], mu_eta[i], mu_phi[i], muon_mass);
+    TLorentzVector lep_sum = mu_tlv[0] + mu_tlv[1];
+    mll_tmp = (lep_sum).M();
+  }
+
+  // Filling
+  newtree_w = *w;
+  newtree_runNumber = *runNumber;
+  newtree_eventNumber = *eventNumber;
+  newtree_jj_deta = *jj_deta;
+  newtree_jj_dphi = *jj_dphi;
   newtree_jj_mass = *jj_mass;
+  newtree_n_jet = *n_jet;
+  newtree_n_jet30 = njet30;
+  newtree_n_jet35 = njet35;
+  newtree_n_jet40 = njet40;
+  newtree_n_jet50 = njet50;
+  newtree_jet_pt = {jet_pt.begin(), jet_pt.end()};
+  newtree_jet_eta = {jet_eta.begin(), jet_eta.end()};
+  newtree_met_tst_et = *met_tst_et;
+  newtree_met_tst_j1_dphi = *met_tst_j1_dphi;
+  newtree_met_tst_j2_dphi = *met_tst_j2_dphi;
+  newtree_met_tst_nolep_et = *met_tst_nolep_et;
+  newtree_met_tst_nolep_j1_dphi = *met_tst_nolep_j1_dphi;
+  newtree_met_tst_nolep_j2_dphi = *met_tst_nolep_j2_dphi;
+  newtree_n_el = *n_el;
+  newtree_el_pt = {el_pt.begin(), el_pt.end()};
+  newtree_el_charge = {el_charge.begin(), el_charge.end()};
+  newtree_n_mu = *n_mu;
+  newtree_mu_pt = {mu_pt.begin(), mu_pt.end()};
+  newtree_mu_charge = {mu_charge.begin(), mu_charge.end()};
+  newtree_mll = mll_tmp;
+  newtree_met_significance = *met_significance;
 
 }
