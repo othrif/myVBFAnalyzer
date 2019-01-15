@@ -48,14 +48,14 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
    // speed up
-  Bool_t toBeKept(kFALSE);
-  if(*n_jet > 1 && jet_pt[0] >= 50e3 && jet_pt[1] >= 80e3) toBeKept = kTRUE;
-  if(*jj_mass > 500e3 && *jj_deta>2.5 && *jj_dphi<2.4) toBeKept &= kTRUE;
-  if(*met_tst_et > 50e3 && *met_tst_nolep_et > 50e3) toBeKept &= kTRUE;
-  if (!toBeKept) return kTRUE;
+  Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 80e3 && jet_pt[1] >= 50e3);
+  saveMe &= (*jj_mass > 1000e3 && *jj_deta>3 && *jj_dphi<1.8);
+  saveMe &= (*met_tst_et > 150e3 && *met_tst_nolep_et > 150e3);
 
-  FillMinitree();
-  newtree->Fill();
+  if (saveMe){
+    FillMinitree();
+    newtree->Fill();
+  }
 
   return kTRUE;
 }
@@ -117,9 +117,9 @@ void truthAnalyzer::FillMinitree()
 
   // Processing
   // Njets
-  int njet25=0, njet30=0, njet35=0, njet40=0, njet50=0;
+  int njet30=0, njet35=0, njet40=0, njet50=0;
   for(auto j : jet_pt){
-    if(j > 25e3) njet25++;
+    //if(j > 25e3) njet25++;
     if(j > 30e3) njet30++;
     if(j > 35e3) njet35++;
     if(j > 40e3) njet40++;

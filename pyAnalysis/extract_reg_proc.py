@@ -13,23 +13,23 @@ import numpy as np
 import root_numpy as rnp
 
 common = "jet_pt[0]>80e3 && jet_pt[1]>50e3 && n_jet>=2 && jet_eta[0]*jet_eta[1]<0 && jj_deta>2.5 && jj_dphi<2.4  && jj_mass>500e3 && "
-selection = {"Zvv_QCD_SR"  :"364142 <=runNumber && runNumber <= 364155 "
-             #"Zvv_QCD_SR"  :common + "364142 <=runNumber && runNumber <= 364155 && (trigger_met==1) && met>50e3       && met_j1_dphi>1       && met_j2_dphi>1       && (n_el+n_mu==0)",
-             #"Wlv_QCD_SR"  :common + "364156 <=runNumber && runNumber <= 364197  && (trigger_met==1) && met>50e3       && met_j1_dphi>1       && met_j2_dphi>1       && (n_el+n_mu==0)",
-             #"Wlvp_QCD_CR" :common + "364156 <=runNumber && runNumber <= 364197 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el1_charge>0 && el1_pt>30e3) || (n_el==0 && n_mu==1 && mu1_charge>0 && mu1_pt>30e3) )",
-             #"Wlvn_QCD_CR" :common + "364156 <=runNumber && runNumber <= 364197 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el1_charge>0 && el1_pt>30e3) || (n_el==0 && n_mu==1 && mu1_charge>0 && mu1_pt>30e3) )",
-             #"Zll_QCD_CR"  :common + "364100 <=runNumber && runNumber <= 364141 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==2 && n_mu==0 && el1_charge*el2_charge<0 && el1_pt>30e3 && el2_pt>7e3 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu1_charge*mu2_charge<0 && mu1_pt>30e3 && mu2_pt>7e3 && abs(mll-91.2e3)<25e3) )",
-             #"Zvv_EWK_SR"  :common + "308095 <=runNumber && runNumber <= 308095 && (trigger_met==1) && met>50e3       && met_j1_dphi>1       && met_j2_dphi>1       && (n_el+n_mu==0)",
-             #"Wlv_EWK_SR"  :common + "308096 <=runNumber && runNumber <= 308098  && (trigger_met==1) && met>50e3       && met_j1_dphi>1       && met_j2_dphi>1       && (n_el+n_mu==0)",
-             #"Wlvp_EWK_CR" :common + "308096 <=runNumber && runNumber <= 308098 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el1_charge>0 && el1_pt>30e3) || (n_el==0 && n_mu==1 && mu1_charge>0 && mu1_pt>30e3) )",
-             #"Wlvn_EWK_CR" :common + "308096 <=runNumber && runNumber <= 308098 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el1_charge>0 && el1_pt>30e3) || (n_el==0 && n_mu==1 && mu1_charge>0 && mu1_pt>30e3) )",
-             #"Zll_EWK_CR"  :common + "308092 <=runNumber && runNumber <= 308094 && (trigger_lep==1) && met_nolep>50e3 && met_nolep_j1_dphi>1 && met_nolep_j2_dphi>1 && ( (n_el==2 && n_mu==0 && el1_charge*el2_charge<0 && el1_pt>30e3 && el2_pt>7e3 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu1_charge*mu2_charge<0 && mu1_pt>30e3 && mu2_pt>7e3 && abs(mll-91.2e3)<25e3) )"
+selection = {
+             "Zvv_QCD_SR"  :common + "364142 <=runNumber && runNumber <= 364155 && met_tst_et>50e3       && met_tst_j1_dphi>1       && met_tst_j2_dphi>1       && (n_el+n_mu==0)",
+             "Wlv_QCD_SR"  :common + "364156 <=runNumber && runNumber <= 364197 && met_tst_et>50e3       && met_tst_j1_dphi>1       && met_tst_j2_dphi>1       && (n_el+n_mu==0)",
+             "Wlvp_QCD_CR" :common + "364156 <=runNumber && runNumber <= 364197 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el_charge[0]>0 && el_pt[0]>30e3) || (n_el==0 && n_mu==1 && mu_charge[0]>0 && mu_pt[0]>30e3) )",
+             "Wlvn_QCD_CR" :common + "364156 <=runNumber && runNumber <= 364197 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el_charge[0]>0 && el_pt[0]>30e3) || (n_el==0 && n_mu==1 && mu_charge[0]>0 && mu_pt[0]>30e3) )",
+             "Zll_QCD_CR"  :common + "364100 <=runNumber && runNumber <= 364141 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && el_pt[0]>30e3 && el_pt[1]>7e3 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu_charge[0]*mu_charge[1]<0 && mu_pt[0]>30e3 && mu_pt[1]>7e3 && abs(mll-91.2e3)<25e3) )",
+             "Zvv_EWK_SR"  :common + "308095 <=runNumber && runNumber <= 308095 && met_tst_et>50e3       && met_tst_j1_dphi>1       && met_tst_j2_dphi>1       && (n_el+n_mu==0)",
+             "Wlv_EWK_SR"  :common + "308096 <=runNumber && runNumber <= 308098 && met_tst_et>50e3       && met_tst_j1_dphi>1       && met_tst_j2_dphi>1       && (n_el+n_mu==0)",
+             "Wlvp_EWK_CR" :common + "308096 <=runNumber && runNumber <= 308098 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el_charge[0]>0 && el_pt[0]>30e3) || (n_el==0 && n_mu==1 && mu_charge[0]>0 && mu_pt[0]>30e3) )",
+             "Wlvn_EWK_CR" :common + "308096 <=runNumber && runNumber <= 308098 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el_charge[0]>0 && el_pt[0]>30e3) || (n_el==0 && n_mu==1 && mu_charge[0]>0 && mu_pt[0]>30e3) )",
+             "Zll_EWK_CR"  :common + "308092 <=runNumber && runNumber <= 308094 && met_tst_nolep_et>50e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && el_pt[0]>30e3 && el_pt[1]>7e3 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu_charge[0]*mu_charge[1]<0 && mu_pt[0]>30e3 && mu_pt[1]>7e3 && abs(mll-91.2e3)<25e3) )"
              }
 
 for key, sel in selection.iteritems():
   print "Processing ", key, "..."
   treelist_r21 = ROOT.TList()
-  in_f_r21 = ROOT.TFile.Open("/Users/othmanerifki/vbf/myVBFAnalyzer/processed/VBFH125.root", "READ")
+  in_f_r21 = ROOT.TFile.Open("/Users/othmanerifki/vbf/myVBFAnalyzer/processed/allMC.root", "READ")
   in_t_r21 = in_f_r21.Get("nominal")
   f="./"
   outfilename = os.path.join(os.path.dirname(f), "{0:s}_rel21.root".format(key))
