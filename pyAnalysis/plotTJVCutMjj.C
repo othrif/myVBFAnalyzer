@@ -14,7 +14,7 @@
 // Zvv_QCD_SR/Wlv_QCD_SR, Zvv_EWK_SR/Wlv_EWK_SR
 // Zvv_QCD_SR/Zvv_EWK_SR
 
-#define N_CUT 3
+#define N_CUT 6
 #define N_HIST 1
 
 void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/proc_160119"){
@@ -39,10 +39,10 @@ void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/proc
   processname["Zll_QCD_CR"]="Z #rightarrow ll QCD, CRZ";
 
 // naming of cuts and histograms
-  //TString cuts[] = {"Mjj1", "Mjj2", "Mjj3","Mjj4", "Mjj5", "Mjj6"};
-  //TString names_cut[]   = {"0.2 < m_{jj} < 0.5 TeV", "0.5 < m_{jj} < 1 TeV", "1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "2 < m_{jj} < 3 TeV", "m_{jj} > 3 TeV"};
-  TString cuts[] = {"Mjj1", "Mjj2", "Mjj3"};
-  TString names_cut[]   = {"1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"};
+  TString cuts[] = {"Mjj1", "Mjj2", "Mjj3","Mjj4", "Mjj5", "Mjj6"};
+  TString names_cut[]   = {"0.2 < m_{jj} < 0.5 TeV", "0.5 < m_{jj} < 1 TeV", "1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "2 < m_{jj} < 3 TeV", "m_{jj} > 3 TeV"};
+  //TString cuts[] = {"Mjj1", "Mjj2", "Mjj3"};
+  //TString names_cut[]   = {"1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"};
   TString histos[]      = {"j3_pt"};
   TString names_histo[] = {"p_{T}^{j3, VETO} [GeV]"};
 
