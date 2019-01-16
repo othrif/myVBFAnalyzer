@@ -1,7 +1,7 @@
 {
     "cuts": [
      {"cut": "w*( n_jet>=2   )", "name": "SRmTJV"},
-     {"cut": "w*( n_jet==2 )", "name": "SR25"},
+     {"cut": "w*( n_jet25==2 )", "name": "SR25"},
      {"cut": "w*( n_jet30==2 )", "name": "SR30"},
      {"cut": "w*( n_jet35==2 )", "name": "SR35"},
      {"cut": "w*( n_jet40==2 )", "name": "SR40"},
