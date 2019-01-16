@@ -50,7 +50,7 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
    // speed up
   Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 80e3 && jet_pt[1] >= 50e3);
   saveMe &= (*jj_mass > 1000e3 && *jj_deta>3 && *jj_dphi<1.8);
-  saveMe &= (*met_tst_et > 150e3 && *met_tst_nolep_et > 150e3);
+  saveMe &= (*met_tst_et > 100e3 || *met_tst_nolep_et > 100e3);
 
   if (saveMe){
     FillMinitree();
@@ -134,6 +134,8 @@ void truthAnalyzer::FillMinitree()
     TLorentzVector lep_sum = el_tlv[0] + el_tlv[1];
     mll_tmp = (lep_sum).M();
   }
+  //std::cout << "\nrunNumber/eventNumber: " <<  *runNumber << "/" << *eventNumber << std::endl;
+  //std::cout << "Mll in ee: " << mll_tmp << ", num e pt's:" << el_pt.GetSize() << ", Nel:" << *n_el << std::endl;
   TLorentzVector mu_tlv[2];
   if (mu_pt.GetSize() > 1){
     for(int i=0; i<2; i++)
@@ -141,7 +143,7 @@ void truthAnalyzer::FillMinitree()
     TLorentzVector lep_sum = mu_tlv[0] + mu_tlv[1];
     mll_tmp = (lep_sum).M();
   }
-
+  //std::cout << "Mll in mm: " << mll_tmp << ", num mu pt's:" << mu_pt.GetSize() << ", Nmu:" << *n_mu << std::endl;
   // Filling
   newtree_w = *w;
   newtree_runNumber = *runNumber;
@@ -165,9 +167,17 @@ void truthAnalyzer::FillMinitree()
   newtree_n_el = *n_el;
   newtree_el_pt = {el_pt.begin(), el_pt.end()};
   newtree_el_charge = {el_charge.begin(), el_charge.end()};
+  if(*n_el==0){
+    newtree_el_charge = {0.,0.};
+    newtree_el_pt = {0.,0.};
+  }
   newtree_n_mu = *n_mu;
   newtree_mu_pt = {mu_pt.begin(), mu_pt.end()};
   newtree_mu_charge = {mu_charge.begin(), mu_charge.end()};
+  if(*n_mu==0){
+    newtree_mu_charge = {0.,0.};
+    newtree_mu_pt = {0.,0.};
+  }
   newtree_mll = mll_tmp;
   newtree_met_significance = *met_significance;
 
