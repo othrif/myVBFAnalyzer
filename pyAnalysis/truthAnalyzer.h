@@ -83,6 +83,7 @@ public :
    vector<float>   newtree_j3_min_mj_over_mjj;
    Float_t         newtree_mj34;
    Float_t         newtree_max_j_eta;
+   Int_t           newtree_n_jet25;
    Int_t           newtree_n_jet30;
    Int_t           newtree_n_jet35;
    Int_t           newtree_n_jet40;

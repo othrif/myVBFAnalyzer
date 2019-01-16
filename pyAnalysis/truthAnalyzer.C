@@ -87,6 +87,7 @@ void truthAnalyzer::BookMinitree()
   newtree->Branch("jj_dphi", &newtree_jj_dphi);
   newtree->Branch("jj_mass", &newtree_jj_mass);
   newtree->Branch("n_jet", &newtree_n_jet);
+  newtree->Branch("n_jet25", &newtree_n_jet25);
   newtree->Branch("n_jet30", &newtree_n_jet30);
   newtree->Branch("n_jet35", &newtree_n_jet35);
   newtree->Branch("n_jet40", &newtree_n_jet40);
@@ -117,9 +118,9 @@ void truthAnalyzer::FillMinitree()
 
   // Processing
   // Njets
-  int njet30=0, njet35=0, njet40=0, njet50=0;
+  int njet25=0, njet30=0, njet35=0, njet40=0, njet50=0;
   for(auto j : jet_pt){
-    //if(j > 25e3) njet25++;
+    if(j > 25e3) njet25++;
     if(j > 30e3) njet30++;
     if(j > 35e3) njet35++;
     if(j > 40e3) njet40++;
@@ -152,6 +153,7 @@ void truthAnalyzer::FillMinitree()
   newtree_jj_dphi = *jj_dphi;
   newtree_jj_mass = *jj_mass;
   newtree_n_jet = *n_jet;
+  newtree_n_jet25 = njet25;
   newtree_n_jet30 = njet30;
   newtree_n_jet35 = njet35;
   newtree_n_jet40 = njet40;
