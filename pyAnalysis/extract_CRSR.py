@@ -28,10 +28,10 @@ processes = {"VBF":     "(runNumber == 308276 || runNumber == 308567)",
              "Wlv_QCD": "(364156 <= runNumber && runNumber <= 364197)",
              "Wlv_EWK": "(308096 <= runNumber && runNumber <= 308098)"
              }
-common = " && jet_pt[0]>80e3 && jet_pt[1]>50e3 && n_jet>=2 && jet_eta[0]*jet_eta[1]<0 && jj_deta>2.5 && jj_dphi<2.4  && jj_mass>1000e3 "
-SR     = " && met_tst_et>100e3       && met_tst_j1_dphi>1       && met_tst_j2_dphi>1 && (n_el+n_mu==0)"
-CRW    = " && met_tst_nolep_et>100e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==1 && n_mu==0 && el_pt[0]>30e3) || (n_el==0 && n_mu==1 && mu_pt[0]>30e3) )"
-CRZ    = " && met_tst_nolep_et>100e3 && met_tst_nolep_j1_dphi>1 && met_tst_nolep_j2_dphi>1 && ( (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && el_pt[0]>30e3 && el_pt[1]>7e3 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu_charge[0]*mu_charge[1]<0 && mu_pt[0]>30e3 && mu_pt[1]>7e3 && abs(mll-91.2e3)<25e3) )"
+common = " && jet_pt[0]>60e3 && jet_pt[1]>40e3 && n_jet>=2 && jet_eta[0]*jet_eta[1]<0 && jj_deta>2.5 && jj_dphi<2.4  && jj_mass>200e3 "
+SR     = " && met_tst_et>100e3       && (n_el+n_mu==0)"
+CRW    = " && met_tst_nolep_et>100e3 && ( (n_el==1 && n_mu==0 ) || (n_el==0 && n_mu==1 ) )"
+CRZ    = " && met_tst_nolep_et>100e3 && ( (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu_charge[0]*mu_charge[1]<0 && abs(mll-91.2e3)<25e3) )"
 selection = {
              "VBF_SR"      : processes["VBF"]     + common + SR,
              "ggF_SR"      : processes["ggF"]     + common + SR,

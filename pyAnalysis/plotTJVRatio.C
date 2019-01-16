@@ -14,8 +14,8 @@
 // Zvv_QCD_SR/Zvv_EWK_SR
 
 
-void plotTJVRatio(){
-  TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/processed";
+void plotTJVRatio(TString outAREA="/Users/othmanerifki/vbf/myVBFAnalyzer/proc_160119"){
+
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Mjj");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Ratio");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/TJV");

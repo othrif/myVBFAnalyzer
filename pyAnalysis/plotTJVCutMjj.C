@@ -17,8 +17,8 @@
 #define N_CUT 3
 #define N_HIST 1
 
-void plotTJVCutMjj(){
-  TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/processed";
+void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/proc_160119"){
+
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Mjj");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Ratio");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/TJV");
@@ -39,16 +39,8 @@ void plotTJVCutMjj(){
   processname["Zll_QCD_CR"]="Z #rightarrow ll QCD, CRZ";
 
 // naming of cuts and histograms
-  TString cutsTJV[] = {"SRmTJV", "SR50", "SR40", "SR35", "SR30", "SR25"};
-  TString names_cutTJV[]  = {"No jet veto", "p_{T}^{j3} #leq 50 GeV", "p_{T}^{j3} #leq 40 GeV", "p_{T}^{j3} #leq 35 GeV", "p_{T}^{j3} #leq 30 GeV", "p_{T}^{j3} #leq 25 GeV"};
-  TString histosTJV[]      = {"jj_mass_old"};
-  TString names_histoTJV[] = {"m_{jj} [GeV]"};
-
-  TString cutsMjj[] = {"Mjj1", "Mjj2", "Mjj3"};
-  TString names_cutMjj[]   = {"1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} > 2 TeV", "m_{jj} > 3 TeV"};
-  TString histosMjj[]      = {"j3_pt"};
-  TString names_histoMjj[] = {"p_{T}^{j3, VETO} [GeV]"};
-
+  //TString cuts[] = {"Mjj1", "Mjj2", "Mjj3","Mjj4", "Mjj5", "Mjj6"};
+  //TString names_cut[]   = {"0.2 < m_{jj} < 0.5 TeV", "0.5 < m_{jj} < 1 TeV", "1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "2 < m_{jj} < 3 TeV", "m_{jj} > 3 TeV"};
   TString cuts[] = {"Mjj1", "Mjj2", "Mjj3"};
   TString names_cut[]   = {"1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"};
   TString histos[]      = {"j3_pt"};

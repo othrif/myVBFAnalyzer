@@ -48,8 +48,8 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
    // speed up
-  Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 80e3 && jet_pt[1] >= 50e3);
-  saveMe &= (*jj_mass > 1000e3 && *jj_deta>3 && *jj_dphi<1.8);
+  Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
+  saveMe &= (*jj_mass > 200e3 && *jj_deta>2.5 && *jj_dphi<2.4);
   saveMe &= (*met_tst_et > 100e3 || *met_tst_nolep_et > 100e3);
 
   if (saveMe){
