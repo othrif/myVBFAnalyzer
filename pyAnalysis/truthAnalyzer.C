@@ -47,6 +47,9 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
   else if ((fProcessed - 1) % 100000 == 0)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
+  //if(fProcessed>1000)
+  //return kTRUE;
+
    // speed up
   Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
   saveMe &= (*jj_mass > 200e3 && *jj_deta>2.5 && *jj_dphi<2.4);
@@ -115,6 +118,12 @@ void truthAnalyzer::BookMinitree()
 void truthAnalyzer::FillMinitree()
 {
 
+  newtree_jet_pt.clear();
+  newtree_jet_eta.clear();
+  newtree_el_pt.clear();
+  newtree_el_eta.clear();
+  newtree_mu_pt.clear();
+  newtree_mu_eta.clear();
 
   // Processing
   // Njets
@@ -158,8 +167,13 @@ void truthAnalyzer::FillMinitree()
   newtree_n_jet35 = njet35;
   newtree_n_jet40 = njet40;
   newtree_n_jet50 = njet50;
-  newtree_jet_pt = {jet_pt.begin(), jet_pt.end()};
-  newtree_jet_eta = {jet_eta.begin(), jet_eta.end()};
+  //newtree_jet_pt = {jet_pt.begin(), jet_pt.end()};
+  //newtree_jet_eta = {jet_eta.begin(), jet_eta.end()};
+  for (int iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
+    if(jet_pt[iJet]>25e3 && fabs(jet_eta[iJet])<4.5){
+    newtree_jet_pt.push_back(jet_pt[iJet]);
+    newtree_jet_eta.push_back(jet_eta[iJet]);
+}
   newtree_met_tst_et = *met_tst_et;
   newtree_met_tst_j1_dphi = *met_tst_j1_dphi;
   newtree_met_tst_j2_dphi = *met_tst_j2_dphi;
@@ -167,15 +181,25 @@ void truthAnalyzer::FillMinitree()
   newtree_met_tst_nolep_j1_dphi = *met_tst_nolep_j1_dphi;
   newtree_met_tst_nolep_j2_dphi = *met_tst_nolep_j2_dphi;
   newtree_n_el = *n_el;
-  newtree_el_pt = {el_pt.begin(), el_pt.end()};
-  newtree_el_charge = {el_charge.begin(), el_charge.end()};
+  //newtree_el_pt = {el_pt.begin(), el_pt.end()};
+  //newtree_el_charge = {el_charge.begin(), el_charge.end()};
+  for (int iEl = 0; iEl < el_pt.GetSize(); ++iEl)
+    if(el_pt[iEl]>7e3 && fabs(el_eta[iEl])<2.5){
+    newtree_el_pt.push_back(el_pt[iEl]);
+    newtree_el_eta.push_back(el_eta[iEl]);
+  }
   if(*n_el==0){
     newtree_el_charge = {0.,0.};
     newtree_el_pt = {0.,0.};
   }
   newtree_n_mu = *n_mu;
-  newtree_mu_pt = {mu_pt.begin(), mu_pt.end()};
-  newtree_mu_charge = {mu_charge.begin(), mu_charge.end()};
+//  newtree_mu_pt = {mu_pt.begin(), mu_pt.end()};
+//  newtree_mu_charge = {mu_charge.begin(), mu_charge.end()};
+ for (int iMu = 0; iMu < mu_pt.GetSize(); ++iMu)
+    if(mu_pt[iMu]>7e3 && fabs(mu_eta[iMu])<2.5){
+    newtree_mu_pt.push_back(mu_pt[iMu]);
+    newtree_mu_eta.push_back(mu_eta[iMu]);
+  }
   if(*n_mu==0){
     newtree_mu_charge = {0.,0.};
     newtree_mu_pt = {0.,0.};

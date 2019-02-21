@@ -1,0 +1,7 @@
+# ignore all temporary files
+*.*~
+*.root*
+*_C.d
+*_C.o
+*_C.so
+*.pcm
