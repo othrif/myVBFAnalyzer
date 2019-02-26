@@ -17,7 +17,7 @@
 #define N_CUT 6
 #define N_HIST 1
 
-void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/myVBFAnalyzer/proc_160119"){
+void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/TJV/processed"){
 
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Mjj");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Ratio");

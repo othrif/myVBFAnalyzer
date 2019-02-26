@@ -98,16 +98,20 @@ void truthAnalyzer::BookMinitree()
   newtree->Branch("jet_pt", &newtree_jet_pt);
   newtree->Branch("jet_eta", &newtree_jet_eta);
   newtree->Branch("met_tst_et", &newtree_met_tst_et);
+  newtree->Branch("met_tst_phi",&newtree_met_tst_phi);
   newtree->Branch("met_tst_j1_dphi", &newtree_met_tst_j1_dphi);
   newtree->Branch("met_tst_j2_dphi", &newtree_met_tst_j2_dphi);
   newtree->Branch("met_tst_nolep_et", &newtree_met_tst_nolep_et);
+  newtree->Branch("met_tst_nolep_et_ReCalc", &newtree_met_tst_nolep_et_ReCalc);
   newtree->Branch("met_tst_nolep_j1_dphi", &newtree_met_tst_nolep_j1_dphi);
   newtree->Branch("met_tst_nolep_j2_dphi", &newtree_met_tst_nolep_j2_dphi);
   newtree->Branch("n_el", &newtree_n_el);
   newtree->Branch("el_pt", &newtree_el_pt);
+  newtree->Branch("el_eta", &newtree_el_eta);
   newtree->Branch("el_charge", &newtree_el_charge);
   newtree->Branch("n_mu", &newtree_n_mu);
   newtree->Branch("mu_pt", &newtree_mu_pt);
+  newtree->Branch("mu_eta", &newtree_mu_eta);
   newtree->Branch("mu_charge", &newtree_mu_charge);
   newtree->Branch("mll", &newtree_mll);
   newtree->Branch("met_significance", &newtree_met_significance);
@@ -121,9 +125,11 @@ void truthAnalyzer::FillMinitree()
   newtree_jet_pt.clear();
   newtree_jet_eta.clear();
   newtree_el_pt.clear();
+  newtree_el_charge.clear();
   newtree_el_eta.clear();
   newtree_mu_pt.clear();
   newtree_mu_eta.clear();
+  newtree_mu_charge.clear();
 
   // Processing
   // Njets
@@ -161,7 +167,7 @@ void truthAnalyzer::FillMinitree()
   newtree_jj_deta = *jj_deta;
   newtree_jj_dphi = *jj_dphi;
   newtree_jj_mass = *jj_mass;
-  newtree_n_jet = *n_jet;
+  //newtree_n_jet = *n_jet;
   newtree_n_jet25 = njet25;
   newtree_n_jet30 = njet30;
   newtree_n_jet35 = njet35;
@@ -169,42 +175,66 @@ void truthAnalyzer::FillMinitree()
   newtree_n_jet50 = njet50;
   //newtree_jet_pt = {jet_pt.begin(), jet_pt.end()};
   //newtree_jet_eta = {jet_eta.begin(), jet_eta.end()};
+  int njets=0;
   for (int iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
     if(jet_pt[iJet]>25e3 && fabs(jet_eta[iJet])<4.5){
-    newtree_jet_pt.push_back(jet_pt[iJet]);
-    newtree_jet_eta.push_back(jet_eta[iJet]);
-}
-  newtree_met_tst_et = *met_tst_et;
-  newtree_met_tst_j1_dphi = *met_tst_j1_dphi;
-  newtree_met_tst_j2_dphi = *met_tst_j2_dphi;
-  newtree_met_tst_nolep_et = *met_tst_nolep_et;
-  newtree_met_tst_nolep_j1_dphi = *met_tst_nolep_j1_dphi;
-  newtree_met_tst_nolep_j2_dphi = *met_tst_nolep_j2_dphi;
-  newtree_n_el = *n_el;
+      newtree_jet_pt.push_back(jet_pt[iJet]);
+      newtree_jet_eta.push_back(jet_eta[iJet]);
+      njets++;
+    }
+    newtree_n_jet = njets;
+    newtree_met_tst_et = *met_tst_et;
+    newtree_met_tst_j1_dphi = *met_tst_j1_dphi;
+    newtree_met_tst_j2_dphi = *met_tst_j2_dphi;
+    newtree_met_tst_nolep_et = *met_tst_nolep_et;
+    newtree_met_tst_nolep_j1_dphi = *met_tst_nolep_j1_dphi;
+    newtree_met_tst_nolep_j2_dphi = *met_tst_nolep_j2_dphi;
   //newtree_el_pt = {el_pt.begin(), el_pt.end()};
   //newtree_el_charge = {el_charge.begin(), el_charge.end()};
-  for (int iEl = 0; iEl < el_pt.GetSize(); ++iEl)
-    if(el_pt[iEl]>7e3 && fabs(el_eta[iEl])<2.5){
-    newtree_el_pt.push_back(el_pt[iEl]);
-    newtree_el_eta.push_back(el_eta[iEl]);
-  }
-  if(*n_el==0){
-    newtree_el_charge = {0.,0.};
-    newtree_el_pt = {0.,0.};
-  }
-  newtree_n_mu = *n_mu;
+    Float_t px = 0;
+    Float_t py = 0;
+    int nel=0;
+    for (int iEl = 0; iEl < el_pt.GetSize(); ++iEl)
+      if(el_pt[iEl]>7e3 && fabs(el_eta[iEl])<2.5){
+        newtree_el_pt.push_back(el_pt[iEl]);
+        newtree_el_charge.push_back(el_charge[iEl]);
+        newtree_el_eta.push_back(el_eta[iEl]);
+        px += el_pt[iEl] * TMath::Cos(el_phi[iEl]);
+        py += el_pt[iEl] * TMath::Sin(el_phi[iEl]);
+        nel++;
+      }
+      /*if(*n_el==0){
+        newtree_el_charge = {0.,0.};
+        newtree_el_pt = {0.,0.};
+        newtree_el_eta = {0.,0.};
+      }*/
+      newtree_n_el = nel;
 //  newtree_mu_pt = {mu_pt.begin(), mu_pt.end()};
 //  newtree_mu_charge = {mu_charge.begin(), mu_charge.end()};
- for (int iMu = 0; iMu < mu_pt.GetSize(); ++iMu)
-    if(mu_pt[iMu]>7e3 && fabs(mu_eta[iMu])<2.5){
-    newtree_mu_pt.push_back(mu_pt[iMu]);
-    newtree_mu_eta.push_back(mu_eta[iMu]);
-  }
-  if(*n_mu==0){
-    newtree_mu_charge = {0.,0.};
-    newtree_mu_pt = {0.,0.};
-  }
-  newtree_mll = mll_tmp;
-  newtree_met_significance = *met_significance;
+      int nmu=0;
+      for (int iMu = 0; iMu < mu_pt.GetSize(); ++iMu)
+        if(mu_pt[iMu]>7e3 && fabs(mu_eta[iMu])<2.5){
+          newtree_mu_pt.push_back(mu_pt[iMu]);
+          newtree_mu_charge.push_back(mu_charge[iMu]);
+          newtree_mu_eta.push_back(mu_eta[iMu]);
+          px += mu_pt[iMu] * TMath::Cos(mu_phi[iMu]);
+          py += mu_pt[iMu] * TMath::Sin(mu_phi[iMu]);
+          nmu++;
+        }
+       /* if(*n_mu==0){
+          newtree_mu_charge = {0.,0.};
+          newtree_mu_pt = {0.,0.};
+          newtree_mu_eta = {0.,0.};
+        }*/
+        newtree_n_mu = nmu;
+        Float_t mpx = *met_tst_et*TMath::Cos(*met_tst_phi) + px;
+        Float_t mpy = *met_tst_et*TMath::Sin(*met_tst_phi) + py;
+        Float_t new_met_nolep = TMath::Sqrt(mpx*mpx+mpy*mpy);
+        newtree_met_tst_nolep_et_ReCalc = new_met_nolep;
+          //if(*met_tst_nolep_et != new_met_nolep)
+          //std::cout << "MET=" << *met_tst_et*1e-3 << ", MET noLep=" << *met_tst_nolep_et*1e-3 << ", MET noLepRecalc=" << new_met_nolep*1e-3 << std::endl;
 
-}
+        newtree_mll = mll_tmp;
+        newtree_met_significance = *met_significance;
+
+      }
