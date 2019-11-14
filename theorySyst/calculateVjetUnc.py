@@ -20,15 +20,14 @@ outPath = "./output/theoVariation_171019"
 if not os.path.exists(outPath):
     os.makedirs(outPath)
 
-#outAll = TFile(outPath+"/VJetsWeights_VBFparam.root", "recreate")
-#outAll.Close()
+outAll = TFile(outPath+"/VJetsWeights_VBFparam.root", "recreate")
+outAll.Close()
 
 channels = ["Z_strong"] #, "W_EWK", "Z_EWK", "W_strong"]
 regions  = ["SR"]#, "CRW", "CRZ"]
-itr=0
+
 for channel in channels:
     for region in regions:
-        print itr
         if channel == "W_EWK" and region == "CRZ":
             continue
         if channel == "Z_EWK" and region == "CRW":
@@ -69,7 +68,7 @@ for channel in channels:
 
         mjj_bins_xaxis = [0.8,1.,1.5,2.,3.5,5]
         dphijj_bins_yaxis = [0,1,2]
-        njet_bins_zaxis = [2,3,4]
+        njet_bins_zaxis = [1.5,2.5,4]
         mjj_nbins_xaxis = 5
         dphijj_nbins_yaxis = 2
         njet_nbins_zaxis = 2
@@ -155,11 +154,7 @@ for channel in channels:
             systs    = ["fac", "renorm", "both"]
 
             inFile   = TFile.Open(outPath+"/variedYields_"+channel+"_"+reg+".root")
-            # outFile  = TFile(outPath+"/reweight_"+channel+"_"+reg+".root", "recreate")
-            if(itr==0):
-                outAll = TFile(outPath+"/VJetsWeights_VBFparam.root", "recreate")
-            else:
-                outAll = TFile(outPath+"/VJetsWeights_VBFparam.root", "update")
+            outAll = TFile(outPath+"/VJetsWeights_VBFparam.root", "update")
 
             yieldNom    = [0.,0.,0.,0.,0.]
             largestUp   = [1.,1.,1.,1.,1.]
@@ -253,12 +248,12 @@ for channel in channels:
                     reweight_down.SetBinContent(i+1, variationDown)
                     reweight_down.SetBinError(i+1, err_variationDown)
                     # SetBinContent(Int_t binx, Int_t biny, Int_t binz, Double_t content)
-                    #if "PhiLow" in reg:
-                    #    var__up[syst].SetBinContent(  i+1, 0, 0,  variationUp)
-                    #    var__down[syst].SetBinContent(  i+1, 0, 0,  variationDown)
-                    #elif "PhiHigh" in reg:
-                    #    var__up[syst].SetBinContent(  i+1, 1, 0,  variationUp)
-                    #    var__down[syst].SetBinContent(  i+1, 1, 0,  variationDown)
+                    if "PhiLow" in reg:
+                        var__up[syst].SetBinContent(  i+1, 1, 1,  variationUp)
+                        var__down[syst].SetBinContent(  i+1, 1, 1,  variationDown)
+                    elif "PhiHigh" in reg:
+                        var__up[syst].SetBinContent(  i+1, 2, 1,  variationUp)
+                        var__down[syst].SetBinContent(  i+1, 2, 1,  variationDown)
                 reweight_up.Write()
                 reweight_down.Write()
                 variationUpIncl   = yieldUIncl/yieldNomIncl
@@ -273,8 +268,8 @@ for channel in channels:
                     err_largestDownIncl = err_variationDownIncl
                 if "Njet" in reg:
                     for i in range(nbins) :
-                        var__up[syst].SetBinContent(  i+1, 0, 1,  variationUpIncl)
-                        var__down[syst].SetBinContent(  i+1, 0, 1,  variationDownIncl)
+                        var__up[syst].SetBinContent(  i+1, 1, 2,  variationUpIncl)
+                        var__down[syst].SetBinContent(  i+1, 1, 2,  variationDownIncl)
 
             envelope_up = TH1F(channel_label + "_" + reg + "_"  + "_" + "envelope__1up", "Envelope up reweight", nbins, array('d',mjj_bins_xaxis))
             envelope_down = TH1F(channel_label + "_" + reg + "_"  + "_" + "envelope__1down", "Envelope down reweight", nbins, array('d',mjj_bins_xaxis))
@@ -430,7 +425,6 @@ for channel in channels:
                 qsfckkw_up.Write()
                 qsfckkw_down.Write()
             inFile.Close()
-#            outFile.Close()
             for var3 in [ "fac", "renorm", "both", "pdf", "qsf", "ckkw"]:
                 var__up[var3].Write()
                 var__down[var3].Write()
@@ -445,5 +439,4 @@ for channel in channels:
         print ""
         for theo in theoUncDown:
             print region+"down="+theo+"_"+channel, ",".join([str('{0:.5g}'.format(x)) for x in theoUncDown[theo]])
-        itr = itr+1
 
