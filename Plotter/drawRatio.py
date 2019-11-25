@@ -17,10 +17,12 @@ p = OptionParser(usage="usage: <path:ROOT file directory>", version="0.1")
 p.add_option('--vars',         type='string', default="jj_mass",          dest='vars')
 p.add_option('--wait',          action='store_true', default=False,   dest='wait')
 p.add_option('--save',          action='store_true', default=False,   dest='save')
-p.add_option('--do-pdf',        action='store_true', default=False,   dest='do_pdf')
-p.add_option('--show-mc-stat-err',  action='store_true', default=False,   dest='show_mc_stat_err')
+p.add_option('--int-lumi',     type='float',  default=36207.66,       dest='int_lumi') # 2017: 44307.4, 2018: 58.45
+p.add_option('--year',         type='int',    default=2016,          dest='year')
 p.add_option('--draw-syst',       action='store_true', default=False,   dest='draw_syst')
 p.add_option('--atlas-style', dest='atlas_style_path', default="/Applications/root_v6.10.08/RootUtils/")
+p.add_option('-o','--output',   type='string', default='outdir/',    dest='outdir',      help='output directory')
+p.add_option('--do-pdf',          action='store_true', default=False,   dest='do_pdf')
 
 (options, args) = p.parse_args()
 
@@ -29,6 +31,13 @@ if not options.wait:
 
 atlas_style_path = options.atlas_style_path
 
+#-------------------------------------------------------------------------
+def chmkDir( path ):
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
 #-------------------------------------------------------------------------
 def Style():
     if not os.path.exists(atlas_style_path):
@@ -108,18 +117,25 @@ def main():
 
     Style()
 
+    if options.year==2018 and options.int_lumi==36207.66:
+        options.int_lumi=58450.1
+    if options.year==2017 and options.int_lumi==36207.66:
+        options.int_lumi=44307.4
+    if options.year==9999 and options.int_lumi==36207.66:
+        options.int_lumi=44307.4+58450.1+36207.66
+
     rfile  = ROOT.TFile(rpath, 'READ')
 
     # sr > data, z, w
     # zcr > data, z
     # wcr > data, w
 
-    regions          = ["sr_allmjj_nn","zcr_allmjj_ll","wcr_allmjj_l"] # zsr, wsr, zcr, wcr
+    regions          = ["zcr_allmjj_ll","wcr_allmjj_l","zcr_allmjj_uu","wcr_allmjj_u","zcr_allmjj_ee","wcr_allmjj_e"] # zcr, wcr
     processes        = ["data","zqcd","zewk","wqcd","wewk","tall"] # zqcd+zewk , wqcd+wewk
     processes_type   = [ "z", "w"]
     variables        = ["jj_mass"]#, "met_tst_et"]
-    ratioregions     = ["sr_allmjj_nnOVERzcr_allmjj_ll","sr_allmjj_nnOVERwcr_allmjj_l","wcr_allmjj_lOVERzcr_allmjj_ll"]
-    ratioregionsTeX  = ["#frac{Z(#nu#nu)+jets}{Z(ll)+jets}","#frac{Z(#nu#nu)+jets}{W(l#nu)+jets}","#frac{W(l#nu)+jets}{Z(ll)+jets}"]
+    ratioregions     = ["wcr_allmjj_eOVERzcr_allmjj_ee","wcr_allmjj_uOVERzcr_allmjj_uu","wcr_allmjj_lOVERzcr_allmjj_ll"]
+    ratioregionsTeX  = ["#frac{W(e#nu)+jets}{Z(ee)+jets}","#frac{W(#mu#nu)+jets}{Z(#mu#mu)+jets}","#frac{W(l#nu)+jets}{Z(ll)+jets}"]
 
     # region, process, variable
     tmphists        = np.zeros( (len(regions), len(processes), len(variables)), dtype=ROOT.TH1F )
@@ -167,12 +183,12 @@ def main():
 
 
     # rebin
-    newBinning = array.array('d',[1000,1200,1500,2000,2500,3500,5000])
+    newBinning = array.array('d',[800,1200,1500,2000,2500,3500,5000])
     for r in regions:
         for v in variables:
             if "jj_mass" in v:
                 for t in processes_type:
-                    Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)] = Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)].Rebin(len(newBinning)-1,Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)].GetName()+"_rebinned", array.array('d',[1000,1200,1500,2000,2500,3500,5000]))
+                    Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)] = Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)].Rebin(len(newBinning)-1,Datahists[regions.index(r)][processes_type.index(t)][variables.index(v)].GetName()+"_rebinned", array.array('d',[800,1200,1500,2000,2500,3500,5000]))
                     MChists[regions.index(r)][processes_type.index(t)][variables.index(v)] = MChists[regions.index(r)][processes_type.index(t)][variables.index(v)].Rebin(len(newBinning)-1,MChists[regions.index(r)][processes_type.index(t)][variables.index(v)].GetName()+"_rebinned", newBinning)
 
 
@@ -188,16 +204,14 @@ def main():
 
             Rhists[0][ratioregions.index(rt)][variables.index(v)] = MChists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Clone()
             Rhists[0][ratioregions.index(rt)][variables.index(v)].Divide(MChists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)])
-            #print reg1, "/", reg2, MChists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Integral(), "/", MChists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)].Integral(), " = ", MChists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Integral()/MChists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)].Integral()
 
             Rhists[1][ratioregions.index(rt)][variables.index(v)] = Datahists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Clone()
             Rhists[1][ratioregions.index(rt)][variables.index(v)].Divide(Datahists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)])
-            #print reg1, "/", reg2, Datahists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Integral(), "/", Datahists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)].Integral(), " = ", Datahists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Integral()/Datahists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)].Integral()
 
             ratiorangeY = 3 * Datahists[regions.index(reg1)][processes_type.index(proc_type1)][variables.index(v)].Integral()/Datahists[regions.index(reg2)][processes_type.index(proc_type2)][variables.index(v)].Integral()
             Rhists[1][ratioregions.index(rt)][variables.index(v)].SetMinimum(0.0)
             Rhists[1][ratioregions.index(rt)][variables.index(v)].SetMaximum(ratiorangeY)
-            Rhists[1][ratioregions.index(rt)][variables.index(v)].GetXaxis().SetRangeUser(1000,5000)
+            Rhists[1][ratioregions.index(rt)][variables.index(v)].GetXaxis().SetRangeUser(800,5000)
 
             Rhists[1][ratioregions.index(rt)][variables.index(v)].SetLineColor(ROOT.kBlack)
             Rhists[1][ratioregions.index(rt)][variables.index(v)].SetMarkerSize(1.2)
@@ -225,7 +239,7 @@ def main():
             Rhists[1][ratioregions.index(rt)][variables.index(v)].SetTitle("")
             Ratios[0][variables.index(v)].SetMinimum(0.4)#(0.9)#(0.5)
             Ratios[0][variables.index(v)].SetMaximum(1.6)#(1.1)#(1.5)
-            Ratios[0][variables.index(v)].GetXaxis().SetRangeUser(1000,5000)
+            Ratios[0][variables.index(v)].GetXaxis().SetRangeUser(800,5000)
             Ratios[0][variables.index(v)].GetXaxis().SetTitle("m_{jj} [GeV]")
             Ratios[0][variables.index(v)].GetYaxis().SetTitle("#frac{Data}{Pred.}")
             Ratios[0][variables.index(v)].GetYaxis().SetNdivisions(5)
@@ -293,9 +307,7 @@ def main():
             l.DrawLatex(0.2, 0.87, "ATLAS")
             l.SetTextFont(42)
             l.DrawLatex(0.3, 0.87, "Work in progress")
-            lumi = 36.1
-            l.DrawLatex(0.17, 0.80, "#int Ldt = #scale[0.9]{"+str(lumi) +" fb^{-1}, #sqrt{s} = 13 TeV}")
-
+            l.DrawLatex(0.17, 0.80, "#int Ldt = #scale[0.9]{"+str(round(float(options.int_lumi)/1000.,1)) +" fb^{-1}, #sqrt{s} = 13 TeV}")
             can[ratioregions.index(rt)][variables.index(v)].cd()
 
             # Pad 2
@@ -323,6 +335,14 @@ def main():
 
             if options.wait:
                 can[ratioregions.index(rt)][variables.index(v)].WaitPrimitive()
+
+            #can[ratioregions.index(rt)][variables.index(v)].SaveAs("test.pdf")
+#            if options.save:
+#                print "Saving to", options.outdir
+#                chmkDir(options.outdir)
+#                can[ratioregions.index(rt)][variables.index(v)].Print(options.outdir+rt+".eps")
+#                if options.do_pdf:
+#                    can[ratioregions.index(rt)][variables.index(v)].Print(options.outdir+rt+".pdf")
 
 
 #-------------------------------------------------------------------------
