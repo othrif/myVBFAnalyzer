@@ -6,12 +6,12 @@
      {"cut": "w*( n_jet35==2 )", "name": "SR35"},
      {"cut": "w*( n_jet40==2 )", "name": "SR40"},
      {"cut": "w*( n_jet50==2 )", "name": "SR50"},
-     {"cut": "w*( n_jet>=2  && 200e3<jj_mass && jj_mass<500e3)", "name": "Mjj1"},
-     {"cut": "w*( n_jet>=2  && 500e3<jj_mass && jj_mass<1000e3)", "name": "Mjj2"},
+     {"cut": "w*( n_jet>=2  && 200e3<jj_mass && jj_mass<800e3)", "name": "Mjj1"},
+     {"cut": "w*( n_jet>=2  && 800e3<jj_mass && jj_mass<1000e3)", "name": "Mjj2"},
      {"cut": "w*( n_jet>=2  && 1000e3<jj_mass && jj_mass<1500e3)", "name": "Mjj3"},
      {"cut": "w*( n_jet>=2  && 1500e3<jj_mass && jj_mass<2000e3)", "name": "Mjj4"},
-     {"cut": "w*( n_jet>=2  && 2000e3<jj_mass && jj_mass<3000e3)", "name": "Mjj5"},
-     {"cut": "w*( n_jet>=2  && jj_mass>3000e3)", "name": "Mjj6"}
+     {"cut": "w*( n_jet>=2  && 2000e3<jj_mass && jj_mass<3500e3)", "name": "Mjj5"},
+     {"cut": "w*( n_jet>=2  && jj_mass>3500e3)", "name": "Mjj6"}
  ],
     "draw": [
         {

@@ -53,7 +53,7 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
    // speed up
   Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
   saveMe &= (*jj_mass > 200e3 && *jj_deta>2.5 && *jj_dphi<2.4);
-  saveMe &= (*met_tst_et > 100e3 || *met_tst_nolep_et > 100e3);
+  saveMe &= (*met_et > 100e3 || *met_nolep_et > 100e3);
 
   if (saveMe){
     FillMinitree();
@@ -97,14 +97,10 @@ void truthAnalyzer::BookMinitree()
   newtree->Branch("n_jet50", &newtree_n_jet50);
   newtree->Branch("jet_pt", &newtree_jet_pt);
   newtree->Branch("jet_eta", &newtree_jet_eta);
-  newtree->Branch("met_tst_et", &newtree_met_tst_et);
-  newtree->Branch("met_tst_phi",&newtree_met_tst_phi);
-  newtree->Branch("met_tst_j1_dphi", &newtree_met_tst_j1_dphi);
-  newtree->Branch("met_tst_j2_dphi", &newtree_met_tst_j2_dphi);
-  newtree->Branch("met_tst_nolep_et", &newtree_met_tst_nolep_et);
-  newtree->Branch("met_tst_nolep_et_ReCalc", &newtree_met_tst_nolep_et_ReCalc);
-  newtree->Branch("met_tst_nolep_j1_dphi", &newtree_met_tst_nolep_j1_dphi);
-  newtree->Branch("met_tst_nolep_j2_dphi", &newtree_met_tst_nolep_j2_dphi);
+  newtree->Branch("met_et", &newtree_met_et);
+  newtree->Branch("met_phi",&newtree_met_phi);
+  newtree->Branch("met_nolep_et", &newtree_met_nolep_et);
+  newtree->Branch("met_nolep_et_ReCalc", &newtree_met_nolep_et_ReCalc);
   newtree->Branch("n_el", &newtree_n_el);
   newtree->Branch("el_pt", &newtree_el_pt);
   newtree->Branch("el_eta", &newtree_el_eta);
@@ -183,12 +179,8 @@ void truthAnalyzer::FillMinitree()
       njets++;
     }
     newtree_n_jet = njets;
-    newtree_met_tst_et = *met_tst_et;
-    newtree_met_tst_j1_dphi = *met_tst_j1_dphi;
-    newtree_met_tst_j2_dphi = *met_tst_j2_dphi;
-    newtree_met_tst_nolep_et = *met_tst_nolep_et;
-    newtree_met_tst_nolep_j1_dphi = *met_tst_nolep_j1_dphi;
-    newtree_met_tst_nolep_j2_dphi = *met_tst_nolep_j2_dphi;
+    newtree_met_et = *met_et;
+    newtree_met_nolep_et = *met_nolep_et;
   //newtree_el_pt = {el_pt.begin(), el_pt.end()};
   //newtree_el_charge = {el_charge.begin(), el_charge.end()};
     Float_t px = 0;
@@ -227,12 +219,12 @@ void truthAnalyzer::FillMinitree()
           newtree_mu_eta = {0.,0.};
         }*/
         newtree_n_mu = nmu;
-        Float_t mpx = *met_tst_et*TMath::Cos(*met_tst_phi) + px;
-        Float_t mpy = *met_tst_et*TMath::Sin(*met_tst_phi) + py;
+        Float_t mpx = *met_et*TMath::Cos(*met_phi) + px;
+        Float_t mpy = *met_et*TMath::Sin(*met_phi) + py;
         Float_t new_met_nolep = TMath::Sqrt(mpx*mpx+mpy*mpy);
-        newtree_met_tst_nolep_et_ReCalc = new_met_nolep;
-          //if(*met_tst_nolep_et != new_met_nolep)
-          //std::cout << "MET=" << *met_tst_et*1e-3 << ", MET noLep=" << *met_tst_nolep_et*1e-3 << ", MET noLepRecalc=" << new_met_nolep*1e-3 << std::endl;
+        newtree_met_nolep_et_ReCalc = new_met_nolep;
+          //if(*met_nolep_et != new_met_nolep)
+          //std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", MET noLepRecalc=" << new_met_nolep*1e-3 << std::endl;
 
         newtree_mll = mll_tmp;
         newtree_met_significance = *met_significance;
