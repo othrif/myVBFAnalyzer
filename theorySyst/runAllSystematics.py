@@ -19,7 +19,7 @@ for channel in channels :
         print "\nRunning systs for channel:", channel, region
         os.system("python calculateOTFYields.py " + channel + " " + region + ">> output.txt")
 
-'''
+
 with open("output.txt") as f:
     content = f.readlines()
     content=sorted(content, key=lambda x:x.split(' ')[0], reverse=True)
@@ -36,4 +36,4 @@ for x in content:
         f.write(var+"\n")
     varOLD = var
     f.write(x.split("=")[1]+"\n")
-'''
+
