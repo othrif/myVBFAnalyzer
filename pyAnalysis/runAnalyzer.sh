@@ -1,7 +1,7 @@
 #!/bin/bash
 
-outputDir=${1:-"~/dust/scratch/myPP/latest/processed"}
-inputDir=${2:-"~/dust/samples/MicroNtuples/v35Truth/"}
+outputDir=${1:-"/nfs/dust/atlas/user/othrif/scratch/myPP/latest/processed"}
+inputDir=${2:-"/nfs/dust/atlas/user/othrif/samples/MicroNtuples/v35Truth/"}
 
 mkdir -p ${outputDir}
 
