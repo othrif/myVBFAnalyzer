@@ -25,12 +25,12 @@
 #define electron_mass         0.510998928   // in MeV
 
 class truthAnalyzer : public TSelector {
-private :
+   private :
    TTree* newtree; //!
    TProofOutputFile *m_prooffile; //!
    TFile *m_outfile; //!
 
-public :
+   public :
    Long64_t        fProcessed=0;//!
    Int_t nentries; //!
    Float_t lumi;//!
@@ -47,9 +47,11 @@ public :
    Int_t           newtree_n_jet;
    Int_t           newtree_n_el;
    Int_t           newtree_n_mu;
-   Float_t        newtree_jj_mass;
-   Float_t        newtree_jj_deta;
-   Float_t        newtree_jj_dphi;
+   Int_t           newtree_n_nu;
+   Int_t           newtree_n_boson;
+   Float_t         newtree_jj_mass;
+   Float_t         newtree_jj_deta;
+   Float_t         newtree_jj_dphi;
    Float_t         newtree_met_et;
    Float_t         newtree_met_nolep_et;
    Float_t         newtree_met_nolep_et_ReCalc;
@@ -63,10 +65,19 @@ public :
    vector<float>   newtree_el_phi;
    vector<float>   newtree_mu_eta;
    vector<float>   newtree_el_eta;
-   vector<Float_t> newtree_jet_pt;
+   vector<float>   newtree_jet_pt;
    vector<float>   newtree_jet_eta;
    vector<float>   newtree_jet_phi;
    vector<float>   newtree_jet_E;
+   vector<float>   newtree_nu_pt;
+   vector<float>   newtree_nu_eta;
+   vector<float>   newtree_nu_phi;
+   vector<float>   newtree_nu_pdgid;
+   vector<float>   newtree_boson_m;
+   vector<float>   newtree_boson_pt;
+   vector<float>   newtree_boson_eta;
+   vector<float>   newtree_boson_phi;
+   vector<float>   newtree_boson_pdgid;
    Float_t         newtree_met_significance;
    vector<float>   newtree_j3_centrality;
    vector<float>   newtree_j3_dRj1;
@@ -111,6 +122,17 @@ public :
    TTreeReaderArray<float> jet_phi = {fReader, "jet_phi"};
    TTreeReaderArray<float> jet_E = {fReader, "jet_E"};
    TTreeReaderValue<Float_t> met_significance = {fReader, "met_significance"};
+   TTreeReaderArray<float> boson_m = {fReader, "boson_m"};
+   TTreeReaderArray<float> boson_pt = {fReader, "boson_pt"};
+   TTreeReaderArray<float> boson_phi = {fReader, "boson_phi"};
+   TTreeReaderArray<float> boson_eta = {fReader, "boson_eta"};
+   TTreeReaderArray<int> boson_pdgid = {fReader, "boson_pdgid"};
+   TTreeReaderArray<float> nu_pt = {fReader, "nu_pt"};
+   TTreeReaderArray<float> nu_phi = {fReader, "nu_phi"};
+   TTreeReaderArray<float> nu_eta = {fReader, "nu_eta"};
+   TTreeReaderArray<float> nu_pdgid = {fReader, "nu_pdgid"};
+   TTreeReaderValue<Int_t> nnus = {fReader, "nnus"};
+   TTreeReaderArray<float> lep_jet_dR = {fReader, "lep_jet_dR"};
 
 
 

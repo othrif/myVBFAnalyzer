@@ -109,6 +109,14 @@ void truthAnalyzer::BookMinitree()
   newtree->Branch("mu_pt", &newtree_mu_pt);
   newtree->Branch("mu_eta", &newtree_mu_eta);
   newtree->Branch("mu_charge", &newtree_mu_charge);
+  newtree->Branch("n_nu", &newtree_n_nu);
+  newtree->Branch("nu_pt", &newtree_nu_pt);
+  newtree->Branch("nu_eta", &newtree_nu_eta);
+  newtree->Branch("nu_pdgid", &newtree_nu_pdgid);
+  newtree->Branch("n_boson", &newtree_n_boson);
+  newtree->Branch("boson_pt", &newtree_boson_pt);
+  newtree->Branch("boson_eta", &newtree_boson_eta);
+  newtree->Branch("boson_pdgid", &newtree_boson_pdgid);
   newtree->Branch("mll", &newtree_mll);
   newtree->Branch("met_significance", &newtree_met_significance);
 
@@ -126,6 +134,9 @@ void truthAnalyzer::FillMinitree()
   newtree_mu_pt.clear();
   newtree_mu_eta.clear();
   newtree_mu_charge.clear();
+  newtree_nu_pt.clear();
+  newtree_nu_eta.clear();
+  newtree_nu_pdgid.clear();
 
   // Processing
   // Njets
@@ -219,14 +230,39 @@ void truthAnalyzer::FillMinitree()
           newtree_mu_eta = {0.,0.};
         }*/
         newtree_n_mu = nmu;
-        Float_t mpx = *met_et*TMath::Cos(*met_phi) + px;
-        Float_t mpy = *met_et*TMath::Sin(*met_phi) + py;
-        Float_t new_met_nolep = TMath::Sqrt(mpx*mpx+mpy*mpy);
-        newtree_met_nolep_et_ReCalc = new_met_nolep;
-          //if(*met_nolep_et != new_met_nolep)
-          //std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", MET noLepRecalc=" << new_met_nolep*1e-3 << std::endl;
+          Float_t mpx = *met_et*TMath::Cos(*met_phi) + px;
+          Float_t mpy = *met_et*TMath::Sin(*met_phi) + py;
+          Float_t new_met_nolep = TMath::Sqrt(mpx*mpx+mpy*mpy);
+          newtree_met_nolep_et_ReCalc = new_met_nolep;
 
-        newtree_mll = mll_tmp;
-        newtree_met_significance = *met_significance;
+    Float_t px_nu = 0;
+    Float_t py_nu = 0;
+        int nnu=0;
+        for (int inu = 0; inu < nu_pt.GetSize(); ++inu)
+          if(nu_pt[inu]>7e3 && fabs(nu_eta[inu])<2.5){
+            newtree_nu_pt.push_back(nu_pt[inu]);
+            newtree_nu_pdgid.push_back(nu_pdgid[inu]);
+            newtree_nu_eta.push_back(nu_eta[inu]);
+            px_nu += nu_pt[inu] * TMath::Cos(nu_phi[inu]);
+            py_nu += nu_pt[inu] * TMath::Sin(nu_phi[inu]);
+            nnu++;
+          }
+          newtree_n_nu = nnu;
 
-      }
+        int nboson=0;
+        for (int iboson = 0; iboson < boson_pt.GetSize(); ++iboson)
+          if(boson_pt[iboson]>7e3 && fabs(boson_eta[iboson])<2.5){
+            newtree_boson_pt.push_back(boson_pt[iboson]);
+            newtree_boson_pdgid.push_back(boson_pdgid[iboson]);
+            newtree_boson_eta.push_back(boson_eta[iboson]);
+            nboson++;
+          }
+          newtree_n_boson = nboson;
+
+          Float_t new_met_nu = TMath::Sqrt(px_nu*px_nu+py_nu*py_nu);
+          std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3 << ", pt boson's=" << newtree_boson_pt[0]*1e-3 << std::endl;
+
+          newtree_mll = mll_tmp;
+          newtree_met_significance = *met_significance;
+
+        }
