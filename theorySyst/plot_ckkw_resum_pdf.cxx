@@ -1,9 +1,10 @@
 // Plot the 7 point variation, the envelope is not working
 // root plot_7point.cxx
 // Change path
-//strong, EWK
-// PhiHigh, PhiLow, Njet
-void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "PhiLow"){
+void plot_ckkw_resum_pdf(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "PhiLow"){
+
+ // TString procV = "EWK"; // strong, EWK
+//  TString region = "PhiLow"; // PhiHigh, PhiLow, Njet
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);
@@ -22,7 +23,6 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
   double min_def = 0.65;
 
   TString files[] = {"Z_"+procV+"_SR"+region,"Z_"+procV+"_CRZ"+region,"W_"+procV+"_SR"+region,"W_"+procV+"_CRW"+region};
-  TString legend_files[] = {"Z "+procV+" SR","Z "+procV+" CRZ","W "+procV+" SR","W "+procV+" CRW"};
   numfiles = 4;
 
 
@@ -37,12 +37,12 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
     TFile *fFinal = new TFile( file_out ,"recreate");
 
     TH1F  *h_Nom   = (TH1F*)fIn->Get( "pdf_up" );
-    TH1F  *h_FUp   = (TH1F*)fIn->Get( "fac_up" );
-    TH1F  *h_FDown = (TH1F*)fIn->Get( "fac_down" );
-    TH1F  *h_RUp   = (TH1F*)fIn->Get( "renorm_up" );
-    TH1F  *h_RDown = (TH1F*)fIn->Get( "renorm_down" );
-    TH1F  *h_QUp   = (TH1F*)fIn->Get( "both_up" );
-    TH1F  *h_QDown = (TH1F*)fIn->Get( "both_down" );
+    TH1F  *h_FUp   = (TH1F*)fIn->Get( "ckkw_up" );
+    TH1F  *h_FDown = (TH1F*)fIn->Get( "ckkw_down" );
+    TH1F  *h_RUp   = (TH1F*)fIn->Get( "resum_up" );
+    TH1F  *h_RDown = (TH1F*)fIn->Get( "resum_down" );
+    TH1F  *h_QUp   = (TH1F*)fIn->Get( "envelope_up" );
+    TH1F  *h_QDown = (TH1F*)fIn->Get( "envelope_down" );
     TH1F  *h_EnvUp   = (TH1F*)fIn->Get( "pdf_up" );
     TH1F  *h_EnvDown = (TH1F*)fIn->Get( "pdf_down" );
     h_Nom->SetLineColor(kBlack);
@@ -85,7 +85,6 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
     h_Nom->GetXaxis()->SetBinLabel(i,Ax_SR[i-1]);
   }
 
-    h_Nom->GetXaxis()->SetTickLength(0);
 
   TCanvas *c = new TCanvas( Form("SystVar%d",ifile) , "SystVar" );
   TPad* p1 = new TPad("p1","p1",0.0,0.25,1.0,1.0,-22);
@@ -93,7 +92,7 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
   p1->Draw();
 
   h_Nom->Draw();
-  //return 0;
+
   /*TH1F* envHi =  new TH1F("envhi", "envhi", num,800 , 2500);
   TH1F* envLo =  new TH1F("envhi", "envhi", num,800 , 2500);
   for (int j = 1; j <= num; ++j) {
@@ -126,8 +125,8 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
 
    h_FDown->Draw("HIST  SAME");
    h_RDown->Draw("HIST  SAME");
-   h_QDown->Draw("HIST  SAME");
-   h_EnvDown->Draw("HIST  SAME");
+   //h_QDown->Draw("HIST  SAME");
+   //h_EnvDown->Draw("HIST  SAME");
 
    /*TH1F* whitearea =  new TH1F("whitearea", "whitearea", num,800 , 2500);;
    for (int j = 1; j <= num; ++j) {
@@ -138,12 +137,14 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
    whitearea->SetFillColor(kWhite);
    whitearea->SetLineColor(kGray);*/
 //whitearea->Draw("hist same");
-   h_QUp->Draw("HIST  SAME");
+
+
+  //h_QUp->Draw("HIST  SAME");
    h_FUp->Draw("HIST  SAME");
    h_RUp->Draw("HIST  SAME");
-   h_EnvUp->Draw("HIST  SAME");
-   quadUp->Draw("HIST  SAME");
-   quadLo->Draw("HIST  SAME");
+   //h_EnvUp->Draw("HIST  SAME");
+   //quadUp->Draw("HIST  SAME");
+   //quadLo->Draw("HIST  SAME");
 
 
    h_Nom->Draw("AXIS same");
@@ -152,19 +153,19 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
    TLegend *legend=new TLegend(0.60,0.54,0.89,0.9);
    legend->SetTextFont(62);
    legend->SetTextSize(0.04);
-   legend->SetHeader(legend_files[ifile]); 
-     //   legend->SetHeader(files[ifile]);     
-
+   legend->SetHeader(files[ifile]);
   //  legend->SetHeader("#splitline{"+Legend+"}{W #rightarrow e#nu}");
   //  legend->AddEntry(h_Nom, "Nominal","lp");
-   legend->AddEntry(h_FUp, "#mu_{F}=2","lp");
-   legend->AddEntry(h_FDown, "#mu_{F}=0.5","lp");
-   legend->AddEntry(h_RUp, "#mu_{R}=2","lp");
-   legend->AddEntry(h_RDown, "#mu_{R}=0.5","lp");
-   legend->AddEntry(h_QUp, "#mu_{F}=2,#mu_{R}=2","lp");
-   legend->AddEntry(h_QDown, "#mu_{F}=0.5,#mu_{R}=0.5","lp");
-   legend->AddEntry(h_EnvUp, "PDF up","lp");
-   legend->AddEntry(h_EnvDown, "PDF down","lp");
+  //
+
+   //legend->AddEntry(h_QUp, "Scale Up","lp");
+   //legend->AddEntry(h_QDown, "Scale Down","lp");
+   //legend->AddEntry(h_EnvUp, "PDF up","lp");
+   //legend->AddEntry(h_EnvDown, "PDF down","lp");
+   legend->AddEntry(h_FUp, "ckkw Up","lp");
+   legend->AddEntry(h_FDown, "ckkw Down","lp");
+   legend->AddEntry(h_RUp, "Resum Up","lp");
+   legend->AddEntry(h_RDown, "Resum Down","lp");
    //legend->AddEntry(quadUp, "(#mu_{F},#mu_{R}) quad","lp");
   //legend->AddEntry(envHi, "Envelope","f");
    legend->Draw();
@@ -185,7 +186,7 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
 
 */
   // Write
-   c->Print( "output/"+folder+"/plots/scale_pdf_"+files[ifile]+"_"+region+".pdf");
+   c->Print( "output/"+folder+"/plots/ckkw_resum_"+files[ifile]+"_"+region+".pdf");
   //c->Write();
   //fFinal->Close();
 
