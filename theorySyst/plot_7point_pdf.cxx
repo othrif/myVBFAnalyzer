@@ -14,7 +14,7 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
 
   gSystem->Exec("mkdir -p output/"+folder+"/plots/env/");
 
-   const int num = 5;
+  const int num = 5;
   TString Ax_SR[num] = {"0.8 TeV < m_{jj} < 1 TeV","1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "2 < m_{jj} < 3.5 TeV", "m_{jj} > 3.5 TeV"};
   int numfiles;
 
@@ -152,8 +152,8 @@ void plot_7point_pdf(TString folder= "theoVariation_171019",TString procV = "EWK
    TLegend *legend=new TLegend(0.60,0.54,0.89,0.9);
    legend->SetTextFont(62);
    legend->SetTextSize(0.04);
-   legend->SetHeader(legend_files[ifile]); 
-     //   legend->SetHeader(files[ifile]);     
+   legend->SetHeader(legend_files[ifile]);
+     //   legend->SetHeader(files[ifile]);
 
   //  legend->SetHeader("#splitline{"+Legend+"}{W #rightarrow e#nu}");
   //  legend->AddEntry(h_Nom, "Nominal","lp");
