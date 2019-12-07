@@ -232,7 +232,7 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
       histo_saver.append(legend)
       legend.Draw('same')
       c.SetGridy()
-      c.SaveAs('systPlots/'+sample+'_'+region+'_'+suffix+'.pdf')
+      c.SaveAs('systPlots/'+NP+'_'+sample+'_'+region+'_'+suffix+'.pdf')
 
 def makeVariationPlots(samples, regions, variations, var_label):
   # plot the uncertainty vs mjj bins for each sample in each region do this for a given NP
@@ -287,7 +287,7 @@ def makeVariationPlots(samples, regions, variations, var_label):
       c.SetGridy()
       c.SetLogy()
       #c.SetLogx()
-      c.SaveAs('variations/'+sample+'_'+region+'_'+suffix+'_'+var_label+'.pdf')
+      c.SaveAs('variations/'+NP+'_'+sample+'_'+region+'_'+suffix+'_'+var_label+'.pdf')
 
 
 
@@ -337,3 +337,23 @@ if __name__ == "__main__":
             elif updn == 'down':
               print round(1-unc_incl[sample][region][NP],4)
            # print ""
+
+    for j,region in enumerate(['SR','CRW','CRZ']):
+      for jj,updn in enumerate(['up','down']):
+        print region+updn
+        for l,sample in enumerate(['Z_strong','W_strong']):
+          if sample == 'Z_strong' and region == 'CRW' or sample == 'W_strong' and region == 'CRZ':
+            continue
+          for k,binn in enumerate(['PhiLow','PhiHigh']):
+            for i,NP in enumerate(['qsf','ckkw']):
+              for m,bin_mjj in enumerate(bins_mjj):
+                if updn == 'up':
+                  print str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                elif updn == 'down':
+                  print str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+            if updn == 'up':
+              print round(1+unc_incl[sample][region][NP],4)
+            elif updn == 'down':
+              print round(1-unc_incl[sample][region][NP],4)
+           # print ""
+  outFile = TFile("test.root", "recreate")
