@@ -5,7 +5,7 @@
 #include <THashList.h>
 #include "TStopwatch.h"
 
-void procAnalyzer(TString inputDir="/nfs/dust/atlas/user/othrif/samples/MicroNtuples/v35Truth/", TString outputDir="/nfs/dust/atlas/user/othrif/scratch/myPP/latest/processed", TString process="W_EWK") {
+void procAnalyzer(TString inputDir="/nfs/dust/atlas/user/othrif/samples/MicroNtuples/v35Truth/", TString outputDir="/nfs/dust/atlas/user/othrif/scratch/myPP/latest/processed", TString process="Z_EWK") {
 
   TStopwatch p;
   p.Start();
