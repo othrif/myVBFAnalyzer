@@ -94,6 +94,7 @@ class truthAnalyzer : public TSelector {
    Int_t           newtree_n_jet40;
    Int_t           newtree_n_jet50;
    Double_t        newtree_mll;
+   vector<float>           newtree_lep_jet_dR;
 
    // Readers to access the data (delete the ones you do not need).
    TTreeReaderValue<Float_t> w = {fReader, "w"};

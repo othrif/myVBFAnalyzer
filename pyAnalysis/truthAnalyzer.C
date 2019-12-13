@@ -6,7 +6,7 @@
 #include <TStyle.h>
 
 
-
+//bool debug = false;
 void truthAnalyzer::Begin(TTree * /*tree*/)
 {
 
@@ -42,13 +42,15 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
    fReader.SetEntry(entry);
    fStatus++; // selected events
 
+  //if(fProcessed>nentries)
+  //return kTRUE;
+
    if ((fProcessed - 1) == 0)
     Info("Process", "Started to process %d events...", nentries);
   else if ((fProcessed - 1) % 100000 == 0)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
-  //if(fProcessed>1000)
-  //return kTRUE;
+
 
    // speed up
   Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
@@ -119,12 +121,14 @@ void truthAnalyzer::BookMinitree()
   newtree->Branch("boson_pdgid", &newtree_boson_pdgid);
   newtree->Branch("mll", &newtree_mll);
   newtree->Branch("met_significance", &newtree_met_significance);
+  newtree->Branch("lep_jet_dR", &newtree_lep_jet_dR);
 
   Info("SlaveBegin", "Booked minitree");
 }
 
 void truthAnalyzer::FillMinitree()
 {
+
 
   newtree_jet_pt.clear();
   newtree_jet_eta.clear();
@@ -182,11 +186,26 @@ void truthAnalyzer::FillMinitree()
   newtree_n_jet50 = njet50;
   //newtree_jet_pt = {jet_pt.begin(), jet_pt.end()};
   //newtree_jet_eta = {jet_eta.begin(), jet_eta.end()};
+  /*if( *runNumber == 308095){
+    if(debug) std::cout << "\n*Znunu > ";
+  }
+  else if( *runNumber == 308092){
+    if(debug) std::cout << "\n*Zee > ";
+  }
+  else if( *runNumber == 308093){
+    if(debug) std::cout << "\n*Zmm > ";
+  }
+  else if( *runNumber == 308094){
+    if(debug) std::cout << "\n*Ztt > ";
+  }
+*/
+
   int njets=0;
   for (int iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
     if(jet_pt[iJet]>25e3 && fabs(jet_eta[iJet])<4.5){
       newtree_jet_pt.push_back(jet_pt[iJet]);
       newtree_jet_eta.push_back(jet_eta[iJet]);
+      if(debug) std::cout << "jet" << iJet << " , pt=" << jet_pt[iJet]*1e-3 << ", eta=" << jet_eta[iJet] << std::endl;
       njets++;
     }
     newtree_n_jet = njets;
@@ -204,6 +223,7 @@ void truthAnalyzer::FillMinitree()
         newtree_el_eta.push_back(el_eta[iEl]);
         px += el_pt[iEl] * TMath::Cos(el_phi[iEl]);
         py += el_pt[iEl] * TMath::Sin(el_phi[iEl]);
+//        if(debug) std::cout << "el" << iEl << " , pt=" << el_pt[iEl]*1e-3 << ", eta=" << el_eta[iEl] << std::endl;
         nel++;
       }
       /*if(*n_el==0){
@@ -222,6 +242,7 @@ void truthAnalyzer::FillMinitree()
           newtree_mu_eta.push_back(mu_eta[iMu]);
           px += mu_pt[iMu] * TMath::Cos(mu_phi[iMu]);
           py += mu_pt[iMu] * TMath::Sin(mu_phi[iMu]);
+//          if(debug) std::cout << "mu" << iMu << " , pt=" << mu_pt[iMu]*1e-3 << ", eta=" << mu_eta[iMu] << std::endl;
           nmu++;
         }
        /* if(*n_mu==0){
@@ -245,6 +266,7 @@ void truthAnalyzer::FillMinitree()
             newtree_nu_eta.push_back(nu_eta[inu]);
             px_nu += nu_pt[inu] * TMath::Cos(nu_phi[inu]);
             py_nu += nu_pt[inu] * TMath::Sin(nu_phi[inu]);
+//            if(debug) std::cout << "nu" << inu << " , pt=" << nu_pt[inu]*1e-3 << ", eta=" << nu_eta[inu] << std::endl;
             nnu++;
           }
           newtree_n_nu = nnu;
@@ -255,14 +277,32 @@ void truthAnalyzer::FillMinitree()
             newtree_boson_pt.push_back(boson_pt[iboson]);
             newtree_boson_pdgid.push_back(boson_pdgid[iboson]);
             newtree_boson_eta.push_back(boson_eta[iboson]);
+//            if(debug) std::cout << "boson" << iboson << " , pt=" << boson_pt[iboson]*1e-3 << ", eta=" << boson_eta[iboson] << std::endl;
             nboson++;
           }
           newtree_n_boson = nboson;
 
           Float_t new_met_nu = TMath::Sqrt(px_nu*px_nu+py_nu*py_nu);
-          std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3 << ", pt boson's=" << newtree_boson_pt[0]*1e-3 << std::endl;
+
+           /* if( *runNumber == 308095){
+              if(debug) std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3 << std::endl;
+            }
+            else if( *runNumber == 308092){
+              if(debug) std::cout << "MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3 << std::endl;
+            }
+            else if( *runNumber == 308093){
+              if(debug) std::cout << "*MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3 << std::endl;
+            }
+            else if( *runNumber == 308094){
+              if(debug) std::cout << "*MET=" << *met_et*1e-3 << ", MET noLep=" << *met_nolep_et*1e-3 << ", met nu's=" << new_met_nu*1e-3  << std::endl;
+            }*/
 
           newtree_mll = mll_tmp;
           newtree_met_significance = *met_significance;
+
+          for (int ilep_jet = 0; ilep_jet < lep_jet_dR.GetSize(); ++ilep_jet)
+          {
+            newtree_lep_jet_dR.push_back(lep_jet_dR[ilep_jet]);
+          }
 
         }
