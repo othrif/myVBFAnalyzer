@@ -45,17 +45,17 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
   //if(fProcessed>nentries)
   //return kTRUE;
 
-   if ((fProcessed - 1) == 0)
+   if (fProcessed  == 0)
     Info("Process", "Started to process %d events...", nentries);
-  else if ((fProcessed - 1) % 100000 == 0)
+  else if ( fProcessed % 10000 == 0)
     Info("Process", "Processed %lld / %d events... ", fProcessed - 1, nentries);
 
 
 
    // speed up
-  Bool_t saveMe = (*n_jet > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
-  saveMe &= (*jj_mass > 200e3 && *jj_deta>2.5 && *jj_dphi<2.4);
-  saveMe &= (*met_et > 100e3 || *met_nolep_et > 100e3);
+  Bool_t saveMe = ( (*n_jet) > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
+  saveMe &= ( (*jj_mass) > 200e3 && (*jj_deta) > 2.5 && (*jj_dphi)<2.4);
+  saveMe &= ( (*met_et) > 100e3 || (*met_nolep_et) > 100e3);
 
   if (saveMe){
     FillMinitree();
@@ -68,12 +68,13 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
 void truthAnalyzer::SlaveTerminate()
 {
    // save
- m_outfile->Write();
- m_outfile->Close();
+ m_outfile->cd();
+ newtree->Write();
  TDirectory *savedir = gDirectory;
  savedir->cd();
  m_prooffile->Print();
  fOutput->Add(m_prooffile);
+ m_outfile->Close();
 }
 
 void truthAnalyzer::Terminate()
@@ -141,6 +142,7 @@ void truthAnalyzer::FillMinitree()
   newtree_nu_pt.clear();
   newtree_nu_eta.clear();
   newtree_nu_pdgid.clear();
+  newtree_lep_jet_dR.clear();
 
   // Processing
   // Njets
@@ -205,7 +207,7 @@ void truthAnalyzer::FillMinitree()
     if(jet_pt[iJet]>25e3 && fabs(jet_eta[iJet])<4.5){
       newtree_jet_pt.push_back(jet_pt[iJet]);
       newtree_jet_eta.push_back(jet_eta[iJet]);
-      if(debug) std::cout << "jet" << iJet << " , pt=" << jet_pt[iJet]*1e-3 << ", eta=" << jet_eta[iJet] << std::endl;
+      //if(debug) std::cout << "jet" << iJet << " , pt=" << jet_pt[iJet]*1e-3 << ", eta=" << jet_eta[iJet] << std::endl;
       njets++;
     }
     newtree_n_jet = njets;

@@ -16,8 +16,8 @@ void procAnalyzer(TString inputDir="/nfs/dust/atlas/user/othrif/samples/MicroNtu
   std::cout << "\nProcessing " << process << "..." << std::endl;
   chain = new TChain("", "");
   chain->Add(inputDir+"/"+process+".root/"+process+"Nominal");
-   if(num == -1)
-    num = chain->GetEntries();
+   //if(num == -1)
+   // num = chain->GetEntries();
   options = TString::Format("%lld", chain->GetEntries())+","+outputDir+","+process;
   chain->Process("truthAnalyzer.C+",options);
   delete chain;
