@@ -68,13 +68,17 @@ Bool_t truthAnalyzer::Process(Long64_t entry)
 void truthAnalyzer::SlaveTerminate()
 {
    // save
+  m_outfile->Write();
+  m_outfile->Close();
+
+   /*
  m_outfile->cd();
  newtree->Write();
  TDirectory *savedir = gDirectory;
  savedir->cd();
  m_prooffile->Print();
  fOutput->Add(m_prooffile);
- m_outfile->Close();
+ m_outfile->Close();*/
 }
 
 void truthAnalyzer::Terminate()

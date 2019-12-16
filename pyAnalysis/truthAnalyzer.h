@@ -26,6 +26,9 @@
 
 class truthAnalyzer : public TSelector {
    private :
+   TTreeReader     fReader;  //!the tree reader
+   TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
    TTree* newtree; //!
    TProofOutputFile *m_prooffile; //!
    TFile *m_outfile; //!
@@ -34,8 +37,7 @@ class truthAnalyzer : public TSelector {
    Long64_t        fProcessed=0;//!
    Int_t nentries; //!
    Float_t lumi;//!
-   TTreeReader     fReader;  //!the tree reader
-   TTree          *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
 
    //Analysis Methods
    void BookMinitree();
