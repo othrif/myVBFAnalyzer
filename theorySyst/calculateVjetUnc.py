@@ -74,11 +74,11 @@ for channel in channels:
         njet_nbins_zaxis = 2
         var__up = {}
         var__down = {}
-        for var3 in [ "fac", "renorm", "both", "pdf", "qsf", "ckkw"]:
+        for var3 in [ "renofact", "pdf", "qsf", "ckkw"]:
             var__up[var3] = TH3F(channel_label + "_" +  region + "_" + var3 + "__1up", var3 + " up reweight",        mjj_nbins_xaxis, array('d',mjj_bins_xaxis), dphijj_nbins_yaxis, array('d',dphijj_bins_yaxis), njet_nbins_zaxis, array('d',njet_bins_zaxis))
             var__down[var3] = TH3F(channel_label + "_" +  region + "_"  + var3 + "__1down", var3 + " down reweight", mjj_nbins_xaxis, array('d',mjj_bins_xaxis), dphijj_nbins_yaxis, array('d',dphijj_bins_yaxis), njet_nbins_zaxis, array('d',njet_bins_zaxis))
-            var__up[var3].SetDirectory(0)
-            var__down[var3].SetDirectory(0)
+            #var__up[var3].SetDirectory(0)
+            #var__down[var3].SetDirectory(0)
 
         binItrScale = 0
         binItrPDF = 0
@@ -247,15 +247,8 @@ for channel in channels:
                     reweight_up.SetBinError(  i+1, err_variationUp)
                     reweight_down.SetBinContent(i+1, variationDown)
                     reweight_down.SetBinError(i+1, err_variationDown)
-                    # SetBinContent(Int_t binx, Int_t biny, Int_t binz, Double_t content)
-                    if "PhiLow" in reg:
-                        var__up[syst].SetBinContent(  i+1, 1, 1,  variationUp)
-                        var__down[syst].SetBinContent(  i+1, 1, 1,  variationDown)
-                    elif "PhiHigh" in reg:
-                        var__up[syst].SetBinContent(  i+1, 2, 1,  variationUp)
-                        var__down[syst].SetBinContent(  i+1, 2, 1,  variationDown)
-                reweight_up.Write()
-                reweight_down.Write()
+                #reweight_up.Write()
+                #reweight_down.Write()
                 variationUpIncl   = yieldUIncl/yieldNomIncl
                 variationDownIncl = yieldDIncl/yieldNomIncl
                 err_variationUpIncl   = yieldUIncl/yieldNomIncl*math.sqrt( math.pow(err_yieldUIncl/yieldUIncl,2) + math.pow(err_yieldNomIncl/yieldNomIncl,2) )
@@ -266,10 +259,6 @@ for channel in channels:
                 if(math.fabs(variationDownIncl-1) > math.fabs(largestDownIncl-1)):
                     largestDownIncl = variationDownIncl
                     err_largestDownIncl = err_variationDownIncl
-                if "Njet" in reg:
-                    for i in range(nbins) :
-                        var__up[syst].SetBinContent(  i+1, 1, 2,  variationUpIncl)
-                        var__down[syst].SetBinContent(  i+1, 1, 2,  variationDownIncl)
 
             envelope_up = TH1F(channel_label + "_" + reg + "_"  + "_" + "envelope__1up", "Envelope up reweight", nbins, array('d',mjj_bins_xaxis))
             envelope_down = TH1F(channel_label + "_" + reg + "_"  + "_" + "envelope__1down", "Envelope down reweight", nbins, array('d',mjj_bins_xaxis))
@@ -280,14 +269,27 @@ for channel in channels:
                 if (debug):  print "Largest UP variation in bin %i: %f %%" % (i, (largestUp[i]-1)*100)
                 envelope_down.SetBinContent(i+1, largestDown[i])
                 envelope_down.SetBinError(i+1, err_largestDown[i])
+                if binItrScale < 5:
+                    var__up["renofact"].SetBinContent(  i+1, 1, 1,  largestUp[i])
+                    var__down["renofact"].SetBinContent(  i+1, 1, 1,  largestDown[i])
+                elif binItrScale < 10:
+                    var__up["renofact"].SetBinContent(  i+1, 2, 1,  largestUp[i])
+                    var__down["renofact"].SetBinContent(  i+1, 2, 1,  largestDown[i])
                 if binItrScale < 10:
                     theoUncUp["renofact"][binItrScale]=largestUp[i]
                     theoUncDown["renofact"][binItrScale]=largestDown[i]
                     binItrScale = binItrScale+1
+
             theoUncUp["renofact"][binItrScale]=largestUpIncl
             theoUncDown["renofact"][binItrScale]=largestDownIncl
-            envelope_up.Write()
-            envelope_down.Write()
+            for i in range(nbins):
+                    var__up["renofact"].SetBinContent(  i+1, 1, 2,  variationUpIncl)
+                    var__down["renofact"].SetBinContent(  i+1, 1, 2,  variationDownIncl)
+                    var__up["renofact"].SetBinContent(  i+1, 2, 2,  variationUpIncl)
+                    var__down["renofact"].SetBinContent(  i+1, 2, 2,  variationDownIncl)
+
+            #envelope_up.Write()
+            #envelope_down.Write()
 
             ########################
             # PDF variations
@@ -349,6 +351,12 @@ for channel in channels:
                 pdf_down.SetBinContent(i+1, 1 - tmp_pdfVar[i])
                 pdf_up.SetBinError(  i+1, err_pdfYield[i])
                 pdf_down.SetBinError(i+1, err_pdfYield[i])
+                if binItrPDF < 5:
+                    var__up["pdf"].SetBinContent(  i+1, 1, 1, 1 + tmp_pdfVar[i])
+                    var__down["pdf"].SetBinContent(  i+1, 1, 1, 1 - tmp_pdfVar[i])
+                elif binItrPDF < 10:
+                    var__up["pdf"].SetBinContent(  i+1, 2, 1,  1 + tmp_pdfVar[i])
+                    var__down["pdf"].SetBinContent(  i+1, 2, 1, 1 - tmp_pdfVar[i])
                 if binItrPDF < 10:
                     theoUncUp["pdf"][binItrPDF]   = 1 + tmp_pdfVar[i]
                     theoUncDown["pdf"][binItrPDF] = 1 - tmp_pdfVar[i]
@@ -356,8 +364,13 @@ for channel in channels:
             pdfErrorIncl = math.sqrt(pdfYieldSqIncl - (pdfYieldIncl * pdfYieldIncl))
             theoUncUp["pdf"][binItrPDF]   = 1 + pdfErrorIncl/pdfYieldIncl
             theoUncDown["pdf"][binItrPDF] = 1 - pdfErrorIncl/pdfYieldIncl
-            pdf_up.Write()
-            pdf_down.Write()
+            for i in range(nbins):
+                    var__up["pdf"].SetBinContent(  i+1, 1, 2,  1 + pdfErrorIncl/pdfYieldIncl)
+                    var__down["pdf"].SetBinContent(  i+1, 1, 2,  1 - pdfErrorIncl/pdfYieldIncl)
+                    var__up["pdf"].SetBinContent(  i+1, 2, 2,  1 + pdfErrorIncl/pdfYieldIncl)
+                    var__down["pdf"].SetBinContent(  i+1, 2, 2,  1 - pdfErrorIncl/pdfYieldIncl)
+            #pdf_up.Write()
+            #pdf_down.Write()
 
             ########################
             # qsf/ckkw variations
@@ -422,12 +435,13 @@ for channel in channels:
                 qsfckkwErrorIncl = math.sqrt(qsfckkwYieldSqIncl - (qsfckkwYieldIncl * qsfckkwYieldIncl))
                 theoUncUp[wVar][binItr[wVar]]   = 1 + qsfckkwErrorIncl/qsfckkwYieldIncl
                 theoUncDown[wVar][binItr[wVar]] = 1 - qsfckkwErrorIncl/qsfckkwYieldIncl
-                qsfckkw_up.Write()
-                qsfckkw_down.Write()
+                #qsfckkw_up.Write()
+                #qsfckkw_down.Write()
             inFile.Close()
-            for var3 in [ "fac", "renorm", "both", "pdf", "qsf", "ckkw"]:
+            for var3 in [ "renofact", "pdf" ]: #, "qsf", "ckkw"]:
                 var__up[var3].Write()
                 var__down[var3].Write()
+
             outAll.Close()
 
 
