@@ -39,10 +39,10 @@ Bool_t slimSkim::Process(Long64_t entry)
 
 
    // speed up
-  Bool_t saveMe = ( (*n_jet) > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
+  Bool_t saveMe = ( (*njets) > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
   saveMe &= ( (*jj_mass) > 200e3 && (*jj_deta) > 2.5 && (*jj_dphi)<2.4);
   saveMe &= ( (*met_et) > 100e3 || (*met_nolep_et) > 100e3);
-  saveMe = true;
+  //saveMe = true;
   if (saveMe){
     FillMinitree();
     newtree->Fill();

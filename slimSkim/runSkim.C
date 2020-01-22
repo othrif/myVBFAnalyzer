@@ -5,7 +5,7 @@
 #include <THashList.h>
 #include "TStopwatch.h"
 
-void runSkim(TString inputDir="/nfs/dust/atlas/user/othrif/samples/MicroNtuples/v35Truth/", TString outputDir="/nfs/dust/atlas/user/othrif/scratch/myPP/latest/processed", TString process="Z_EWK", long long num = -1, TString debug = "false") {
+void runSkim(TString inputDir="/nfs/dust/atlas/user/othrif/samples/MicroNtuples/v35Truth/", TString outputDir="/nfs/dust/atlas/user/othrif/scratch/myPP/latest/processed", TString process="W_EWK", long long num = -1, TString debug = "false") {
 
   TStopwatch p;
   p.Start();
