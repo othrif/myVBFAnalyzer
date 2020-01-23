@@ -42,7 +42,7 @@ Bool_t slimSkim::Process(Long64_t entry)
   Bool_t saveMe = ( (*njets) > 1 && jet_pt[0] >= 60e3 && jet_pt[1] >= 40e3);
   saveMe &= ( (*jj_mass) > 200e3 && (*jj_deta) > 2.5 && (*jj_dphi)<2.4);
   saveMe &= ( (*met_et) > 100e3 || (*met_nolep_et) > 100e3);
-  //saveMe = true;
+  saveMe = true;
   if (saveMe){
     FillMinitree();
     newtree->Fill();
@@ -181,6 +181,7 @@ void slimSkim::FillMinitree()
     ee_phi = (lep_sum).Phi();
     ee_m   = (lep_sum).M();
   }
+
   TLorentzVector mu_tlv[2];
   if (mu_pt.GetSize() > 1){
    for(int i=0; i<2; i++) mu_tlv[i].SetPtEtaPhiM(mu_pt[i], mu_eta[i], mu_phi[i], muon_mass);
@@ -191,6 +192,7 @@ void slimSkim::FillMinitree()
   mumu_phi = (lep_sum).Phi();
   mumu_m   = (lep_sum).M();
 }
+
   TLorentzVector nu_tlv[2];
   if (nu_pt.GetSize() > 1){
    for(int i=0; i<2; i++) nu_tlv[i].SetPtEtaPhiM(nu_pt[i], nu_eta[i], nu_phi[i], nu_mass);
@@ -201,6 +203,7 @@ void slimSkim::FillMinitree()
   nunu_phi = (lep_sum).Phi();
   nunu_m   = (lep_sum).M();
 }
+
 if(mll_tmp)
   newtree_mll = mll_tmp;
 
@@ -234,7 +237,7 @@ for (uint iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
  Float_t py = 0;
  int nel=0;
  for (uint iEl = 0; iEl < el_pt.GetSize(); ++iEl)
-   if(el_pt[iEl]>7e3 && fabs(el_eta[iEl])<2.5){
+   if(el_pt[iEl]>10e3 && fabs(el_eta[iEl])<2.5){
      newtree_el_pt.push_back(el_pt[iEl]);
      newtree_el_charge.push_back(el_charge[iEl]);
      newtree_el_eta.push_back(el_eta[iEl]);
@@ -246,7 +249,7 @@ for (uint iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
    newtree_n_el = nel;
    int nmu=0;
    for (uint iMu = 0; iMu < mu_pt.GetSize(); ++iMu)
-     if(mu_pt[iMu]>7e3 && fabs(mu_eta[iMu])<2.5){
+     if(mu_pt[iMu]>10e3 && fabs(mu_eta[iMu])<2.5){
        newtree_mu_pt.push_back(mu_pt[iMu]);
        newtree_mu_charge.push_back(mu_charge[iMu]);
        newtree_mu_eta.push_back(mu_eta[iMu]);
@@ -265,9 +268,9 @@ for (uint iJet = 0; iJet < jet_pt.GetSize(); ++iJet)
      Float_t py_nu = 0;
      int nnu=0;
      for (uint inu = 0; inu < nu_pt.GetSize(); ++inu)
-       if(nu_pt[inu]>7e3 && fabs(nu_eta[inu])<2.5){
+       if(nu_pt[inu]>10e3 && fabs(nu_eta[inu])<2.5){
          newtree_nu_pt.push_back(nu_pt[inu]);
-         newtree_nu_pdgid.push_back(nu_pdgid[inu]);
+	 //         newtree_nu_pdgid.push_back(nu_pdgid[inu]);
          newtree_nu_eta.push_back(nu_eta[inu]);
          px_nu += nu_pt[inu] * TMath::Cos(nu_phi[inu]);
          py_nu += nu_pt[inu] * TMath::Sin(nu_phi[inu]);

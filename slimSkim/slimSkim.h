@@ -62,7 +62,7 @@ class slimSkim : public TSelector {
    vector<float>   newtree_nu_pt;
    vector<float>   newtree_nu_eta;
    vector<float>   newtree_nu_phi;
-   vector<float>   newtree_nu_pdgid;
+   vector<int>   newtree_nu_pdgid;
    vector<float>   newtree_boson_m;
    vector<float>   newtree_boson_pt;
    vector<float>   newtree_boson_eta;

@@ -28,22 +28,22 @@ processes = {"VBF":     "(runNumber == 308276 || runNumber == 308567)",
              "Wlv_QCD": "(364156 <= runNumber && runNumber <= 364197)",
              "Wlv_EWK": "(308096 <= runNumber && runNumber <= 308098)"
              }
-common = " && jet_pt[0]>60e3 && jet_pt[1]>40e3 && n_jet>=2 " # && jet_eta[0]*jet_eta[1]<0 && jj_deta>2.5 && jj_dphi<2.4  && jj_mass>200e3 "
-SR     = " && met_et>100e3       && (n_el+n_mu==0 && n_nu==2 && abs(mll-91.2e3)<25e3 )"
-CRZ    = "  && met_nolep_et>100e3 && (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && abs(mll-91.2e3)<25e3)"
+common = " && n_jet>=2 " # " && jet_pt[0]>60e3 && jet_pt[1]>40e3 && n_jet>=2 && jet_eta[0]*jet_eta[1]<0 && jj_deta>2.5 && jj_dphi<2.4  && jj_mass>200e3 "
+SR     = " && (n_nu==2  )" # && met_et>100e3 && abs(mll-91.2e3)<25e3
+CRZ    = " && (n_el==2 )" #  && met_nolep_et>100e3 && el_charge[0]*el_charge[1]<0 && abs(mll-91.2e3)<25e3
 #CRW    = " && met_nolep_et>100e3 && ( (n_el==1 && n_mu==0 ) || (n_el==0 && n_mu==1 ) )"
 #CRZ    = " && met_nolep_et>100e3 && ( (n_el==2 && n_mu==0 && el_charge[0]*el_charge[1]<0 && abs(mll-91.2e3)<25e3) || (n_el==0 && n_mu==2 && mu_charge[0]*mu_charge[1]<0 && abs(mll-91.2e3)<25e3) )"
 selection = {
              #"VBF_SR"      : processes["VBF"]     + common + SR,
              #"ggF_SR"      : processes["ggF"]     + common + SR,
-             #"Zvv_QCD_SR"  : processes["Zvv_QCD"] + common + SR,
-             "Zvv_EWK_SR"  : processes["Zvv_EWK"] + common + SR,
-             "Zll_QCD_SR"  : processes["Zll_QCD"] + common + SR,
+             "Zvv_QCD_SR"  : processes["Zvv_QCD"] + common + SR,
+             #"Zvv_EWK_SR"  : processes["Zvv_EWK"] + common + SR,
+             #"Zll_QCD_SR"  : processes["Zll_QCD"] + common + SR,
             # "Zll_EWK_SR"  : processes["Zll_EWK"] + common + SR,
              #"Wlv_QCD_SR"  : processes["Wlv_QCD"] + common + SR,
     #         "Wlv_EWK_SR"  : processes["Wlv_EWK"] + common + SR,
              "Zll_QCD_CR"  : processes["Zll_QCD"] + common + CRZ,
-             "Zll_EWK_CR"  : processes["Zll_EWK"] + common + CRZ,
+             #"Zll_EWK_CR"  : processes["Zll_EWK"] + common + CRZ,
              #"Wlv_QCD_CR"  : processes["Wlv_QCD"] + common + CRW,
     #"Wlv_EWK_CR"  : processes["Wlv_EWK"] + common + CRW
              }
