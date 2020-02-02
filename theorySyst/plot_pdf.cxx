@@ -1,7 +1,10 @@
 // Plot all the pdf variations
 // root plot_pdf.cxx
 // Change path
-void plot_pdf(TString folder= "theoVariation_250319"){
+void plot_pdf(TString folder= "theoVariation_171019"){
+
+  TString procV = "strong"; // strong, EWK
+  TString region = "Njet"; // PhiHigh, PhiLow, Njet
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);
@@ -10,17 +13,16 @@ void plot_pdf(TString folder= "theoVariation_250319"){
   gROOT->ForceStyle();
   TH1::AddDirectory(kFALSE);
 
-  gSystem->Exec("mkdir -p /Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder+"/plots/pdf/");
+  gSystem->Exec("mkdir -p output/"+folder+"/plots/env/");
 
-  TString region;
+  const int num = 5;
+  TString Ax_SR[num] = {"0.8 TeV < m_{jj} < 1 TeV","1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "2 < m_{jj} < 3.5 TeV", "m_{jj} > 3.5 TeV"};
   int numfiles;
 
   double max_def = 2.5;
   double min_def = 0.5;
 
-TString version="rel21";
-  region = "SR";
-  TString files[] = {"Z_strong_SR"+version,"Z_strong_CRZ"+version,"W_strong_SR"+version,"W_strong_CRW"+version};
+ TString files[] = {"Z_"+procV+"_SR"+region,"Z_"+procV+"_CRZ"+region,"W_"+procV+"_SR"+region,"W_"+procV+"_CRW"+region};
   numfiles = 4;
 
 /*
@@ -34,10 +36,12 @@ region = "WCR";
 
 
   for (int ifile =0; ifile< numfiles; ifile++){
+    std::cout << files[ifile] << std::endl;
 
-    TString file_in = "/Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder+"/reweight_"+files[ifile]+".root";
-    TString file_out = "/Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder+"/plots/pdf/output.root";
+    TString file_in = "output/"+folder+"/reweight_"+files[ifile]+".root";
+    TString file_out = "output/"+folder+"/plots/env/output.root";
     TString Legend = "Uncertainties";
+
 
     TFile *fIn = new TFile( file_in );
     TFile *fFinal = new TFile( file_out ,"recreate");
@@ -67,8 +71,8 @@ region = "WCR";
     h_Nom->SetMinimum(min_def);
     h_Nom->SetMaximum(max_def);
 
-    const int num = 3;
-  TString Ax_SR[num] = {"1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"}; //{"SRVLQ0","SRVLQ1","SRVLQ2","SRVLQ3","SRVLQ4","SRVLQ5","SRVLQ6","SRVLQ7"};
+
+
   for (int i=1; i<=num; i++) {
     h_Nom->SetBinContent(i, 0);
     h_Nom->SetBinError(i, 0);

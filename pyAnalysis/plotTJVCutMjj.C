@@ -14,10 +14,10 @@
 // Zvv_QCD_SR/Wlv_QCD_SR, Zvv_EWK_SR/Wlv_EWK_SR
 // Zvv_QCD_SR/Zvv_EWK_SR
 
-#define N_CUT 6
+#define N_CUT 4
 #define N_HIST 1
 
-void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/TJV/processed"){
+void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/161219/"){
 
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Mjj");
   gSystem->Exec("mkdir -p "+outAREA+"/plots/Ratio");
@@ -25,22 +25,22 @@ void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/TJV/processed"){
 
 // processes histogram names and caption
   std::map<TString,TString> processname;
-  processname["VBF_SR"]="VBF H(125 ) #rightarrow inv., SR";
-  processname["ggF_SR"]="ggF H(125 ) #rightarrow inv., SR";
+  //processname["VBF_SR"]="VBF H(125 ) #rightarrow inv., SR";
+  //processname["ggF_SR"]="ggF H(125 ) #rightarrow inv., SR";
   processname["Zvv_EWK_SR"]="Z #rightarrow #nu#nu EWK, SR";
   processname["Zvv_QCD_SR"]="Z #rightarrow #nu#nu QCD, SR";
-  processname["Zll_EWK_SR"]="Z #rightarrow ll EWK, SR";
-  processname["Zll_QCD_SR"]="Z #rightarrow ll QCD, SR";
-  processname["Wlv_EWK_SR"]="W #rightarrow #slash{l}#nu EWK, SR";
-  processname["Wlv_QCD_SR"]="W #rightarrow #slash{l}#nu QCD, SR";
-  processname["Wlv_EWK_CR"]="W #rightarrow l#nu EWK, CRW";
-  processname["Wlv_QCD_CR"]="W #rightarrow l#nu QCD, CRW";
+  //processname["Zll_EWK_SR"]="Z #rightarrow ll EWK, SR";
+  //processname["Zll_QCD_SR"]="Z #rightarrow ll QCD, SR";
+  //processname["Wlv_EWK_SR"]="W #rightarrow #slash{l}#nu EWK, SR";
+  //processname["Wlv_QCD_SR"]="W #rightarrow #slash{l}#nu QCD, SR";
+  //processname["Wlv_EWK_CR"]="W #rightarrow l#nu EWK, CRW";
+  //processname["Wlv_QCD_CR"]="W #rightarrow l#nu QCD, CRW";
   processname["Zll_EWK_CR"]="Z #rightarrow ll EWK, CRZ";
   processname["Zll_QCD_CR"]="Z #rightarrow ll QCD, CRZ";
 
 // naming of cuts and histograms
-  TString cuts[] = {"Mjj1", "Mjj2", "Mjj3","Mjj4", "Mjj5", "Mjj6"};
-  TString names_cut[]   = {"0.2 < m_{jj} < 0.5 TeV", "0.5 < m_{jj} < 1 TeV", "1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "2 < m_{jj} < 3 TeV", "m_{jj} > 3 TeV"};
+  TString cuts[] = {"Mjj2", "Mjj3","Mjj4", "Mjj5"}; // "Mjj1",
+  TString names_cut[]   = {"0.8 < m_{jj} < 1 TeV", "1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"};  // {"0.2 < m_{jj} < 0.8 TeV",
   //TString cuts[] = {"Mjj1", "Mjj2", "Mjj3"};
   //TString names_cut[]   = {"1 < m_{jj} < 1.5 TeV", "1.5 < m_{jj} < 2 TeV", "m_{jj} > 2 TeV"};
   TString histos[]      = {"j3_pt"};
@@ -59,7 +59,7 @@ void plotTJVCutMjj(TString outAREA = "/Users/othmanerifki/vbf/TJV/processed"){
   for (auto const& x : processname){
     TString process = x.first;
     std::cout << "Looking at process: " << process << std::endl;
-    TString additional ="_6TJV";
+    TString additional ="_5TJV";
     bool ratio = true;
     const char separator    = ' ';
     const int nameWidth     = 20;
@@ -189,15 +189,15 @@ myCanvas->SaveAs(outAREA+"/plots/Mjj/histo_"+histos[i_h]+"_"+process+additional+
 // Zvv_QCD_SR/Zvv_EWK_SR > F_Z_Z
 
 std::map<TString,std::array<string,5>> processratio;
-processratio["P_Z_W_QCD"]=std::array<std::string, 5>{"Zvv_QCD_SR","Wlv_QCD_CR","Z(vv)/W(lv) QCD"  , "0.6", "1.4"};
-processratio["P_Z_W_EWK"]=std::array<std::string, 5>{"Zvv_EWK_SR","Wlv_EWK_CR","Z(vv)/W(lv) EWK"  , "0.85", "1.2"};
+//processratio["P_Z_W_QCD"]=std::array<std::string, 5>{"Zvv_QCD_SR","Wlv_QCD_CR","Z(vv)/W(lv) QCD"  , "0.6", "1.4"};
+//processratio["P_Z_W_EWK"]=std::array<std::string, 5>{"Zvv_EWK_SR","Wlv_EWK_CR","Z(vv)/W(lv) EWK"  , "0.85", "1.2"};
 processratio["P_Z_Z_QCD"]=std::array<std::string, 5>{"Zvv_QCD_SR","Zll_QCD_CR","Z(vv)/Z(ll) QCD"  , "0.8", "1.4"};
 processratio["P_Z_Z_EWK"]=std::array<std::string, 5>{"Zvv_EWK_SR","Zll_EWK_CR","Z(vv)/Z(ll) EWK"  , "0.8", "1.4"};
-processratio["P_W_W_QCD"]=std::array<std::string, 5>{"Wlv_QCD_SR","Wlv_QCD_CR","W(v)/W(lv) QCD"   , "0.6", "1.35"};
-processratio["P_W_W_EWK"]=std::array<std::string, 5>{"Wlv_EWK_SR","Wlv_EWK_CR","W(v)/W(lv) EWK"   , "0.6", "1.4"};
-processratio["S_Z_W_QCD"]=std::array<std::string, 5>{"Zvv_QCD_SR","Wlv_QCD_SR","Z(vv)/W(v) QCD"   , "0.8", "1.4"};
-processratio["S_Z_W_EWK"]=std::array<std::string, 5>{"Zvv_EWK_SR","Wlv_EWK_SR","Z(vv)/W(v) EWK"   , "0.95", "1.7"};
-processratio["F_Z_Z"]    =std::array<std::string, 5>{"Zvv_QCD_SR","Zvv_EWK_SR","Z(vv)QCD/Z(vv)EWK", "0", "1.9"};
+//processratio["P_W_W_QCD"]=std::array<std::string, 5>{"Wlv_QCD_SR","Wlv_QCD_CR","W(v)/W(lv) QCD"   , "0.6", "1.35"};
+//processratio["P_W_W_EWK"]=std::array<std::string, 5>{"Wlv_EWK_SR","Wlv_EWK_CR","W(v)/W(lv) EWK"   , "0.6", "1.4"};
+//processratio["S_Z_W_QCD"]=std::array<std::string, 5>{"Zvv_QCD_SR","Wlv_QCD_SR","Z(vv)/W(v) QCD"   , "0.8", "1.4"};
+//processratio["S_Z_W_EWK"]=std::array<std::string, 5>{"Zvv_EWK_SR","Wlv_EWK_SR","Z(vv)/W(v) EWK"   , "0.95", "1.7"};
+//processratio["F_Z_Z"]    =std::array<std::string, 5>{"Zvv_QCD_SR","Zvv_EWK_SR","Z(vv)QCD/Z(vv)EWK", "0", "1.9"};
 
 int i=0;
 for (auto const& x : processratio){
@@ -234,7 +234,7 @@ for (auto const& x : processratio){
   //myCanvas2->SaveAs(outAREA+"/plots/Mjj/eff_"+process+".C");
 }
 
-
+/*
 // Manipulate input histograms
 std::vector <TString> samples;
 samples.push_back("Zvv_EWK_SR");
@@ -347,5 +347,5 @@ for (UInt_t i_c = 0; i_c < N_CUT; i_c++) {
 }
 myCanvas5->SaveAs(outAREA+"/plots/Mjj/SsB_"+histos[i_h]+".pdf");
 //myCanvas5->SaveAs(outAREA+"/plots/Mjj/SsB_"+histos[i_h]+".C");
-
+*/
 }

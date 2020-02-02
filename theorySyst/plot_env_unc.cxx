@@ -2,7 +2,7 @@
 // 1 > Rel21
 // 2 > Rel20
 
-void plot_env_unc(TString folder1= "theoVariation_250319"){
+void plot_env_unc(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "PhiLow"){
 
   using namespace TMath;
 
@@ -13,16 +13,18 @@ void plot_env_unc(TString folder1= "theoVariation_250319"){
   gROOT->ForceStyle();
   TH1::AddDirectory(kFALSE);
 
-  gSystem->Exec("mkdir -p /Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder1+"/plots/env/");
+  gSystem->Exec("mkdir -p output/"+folder+"/plots/unc/");
+
+  const int numbins = 5;
+  TString Ax_SR[numbins] = {"0.8 TeV < m_{jj} < 1 TeV","1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "2 < m_{jj} < 3.5 TeV", "m_{jj} > 3.5 TeV"};
+  int numfiles;
 
   double max_def = 30;
   double min_def = -10;
 
-  TString version1 = "rel21";
-
-  TString files[] = {"reweight_Z_strong_SR"+version1,"reweight_Z_strong_CRZ"+version1,"reweight_W_strong_SR"+version1,"reweight_W_strong_CRW"+version1};
-  int numfiles = 4;
-  const int numbins = 3; // 3 mjj bins
+  TString files[] = {"Z_"+procV+"_SR"+region,"Z_"+procV+"_CRZ"+region,"W_"+procV+"_SR"+region,"W_"+procV+"_CRW"+region};
+  TString legend_files[] = {"Z "+procV+" SR","Z "+procV+" CRZ","W "+procV+" SR","W "+procV+" CRW"};
+  numfiles = 4;
 
 
   TString var[] = {"envelope"};
@@ -35,9 +37,8 @@ void plot_env_unc(TString folder1= "theoVariation_250319"){
   for (int ifile =0; ifile< numfiles; ifile++)
     for (int jvar =0; jvar< numvars; jvar++){
 
-      TString file_in = "/Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder1+"/"+files[ifile]+".root";
+      TString file_in = "output/"+folder+"/reweight_"+files[ifile]+".root";
       TFile *fIn = new TFile( file_in );
-
 
       TH1F  *h_sys_up = (TH1F*)fIn->Get( var[jvar]+"_up" );
       TH1F  *h_sys_dn = (TH1F*)fIn->Get( var[jvar]+"_down" );

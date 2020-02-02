@@ -3,7 +3,7 @@
 // Change path
 void plot_7point(TString folder= "theoVariation_171019"){
 
-  TString procV = "strong"; // strong, EWK
+  TString procV = "EWK"; // strong, EWK
   TString region = "PhiLow"; // PhiHigh, PhiLow, Njet
 
   //  SetAtlasStyle();
@@ -15,10 +15,11 @@ void plot_7point(TString folder= "theoVariation_171019"){
 
   gSystem->Exec("mkdir -p output/"+folder+"/plots/env/");
 
-
+   const int num = 5;
+  TString Ax_SR[num] = {"0.8 TeV < m_{jj} < 1 TeV","1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "2 < m_{jj} < 3.5 TeV", "m_{jj} > 3.5 TeV"};
   int numfiles;
 
-  double max_def = 2.0;
+  double max_def = 2.4;
   double min_def = 0.65;
 
   TString files[] = {"Z_"+procV+"_SR"+region,"Z_"+procV+"_CRZ"+region,"W_"+procV+"_SR"+region,"W_"+procV+"_CRW"+region};
@@ -26,6 +27,7 @@ void plot_7point(TString folder= "theoVariation_171019"){
 
 
   for (int ifile =0; ifile< numfiles; ifile++){
+    std::cout << files[ifile] << std::endl;
 
     TString file_in = "output/"+folder+"/reweight_"+files[ifile]+".root";
     TString file_out = "output/"+folder+"/plots/env/output.root";
@@ -41,9 +43,8 @@ void plot_7point(TString folder= "theoVariation_171019"){
     TH1F  *h_RDown = (TH1F*)fIn->Get( "renorm_down" );
     TH1F  *h_QUp   = (TH1F*)fIn->Get( "both_up" );
     TH1F  *h_QDown = (TH1F*)fIn->Get( "both_down" );
-    TH1F  *h_EnvUp   = (TH1F*)fIn->Get( "envelope_up" );
-    TH1F  *h_EnvDown = (TH1F*)fIn->Get( "envelope_down" );
-
+    TH1F  *h_EnvUp   = (TH1F*)fIn->Get( "pdf_up" );
+    TH1F  *h_EnvDown = (TH1F*)fIn->Get( "pdf_down" );
     h_Nom->SetLineColor(kBlack);
     h_FUp->SetLineColor(kRed+1);
     h_FUp->SetMarkerColor(kRed+1);
@@ -60,12 +61,16 @@ void plot_7point(TString folder= "theoVariation_171019"){
     h_QDown->SetLineColor(kGreen+1);
     h_QDown->SetMarkerColor(kGreen+1);
     h_QDown->SetLineStyle(7);
-    h_EnvUp->SetLineColor(kGray);
-    h_EnvDown->SetLineColor(kGray);
-    h_EnvUp->SetFillColor(kGray);
-    h_EnvDown->SetFillColor(kGray);
+    h_EnvUp->SetLineColor(kGray+1);
+    h_EnvUp->SetMarkerColor(kGray+1);
+    h_EnvDown->SetLineColor(kGray+1);
+    h_EnvDown->SetMarkerColor(kGray+1);
+    h_EnvDown->SetLineStyle(7);
+
 
     h_Nom->GetXaxis()->SetLabelOffset(0.01);
+    //h_Nom->GetXaxis()->SetNdivisions(0);
+    //std::cout << h_Nom->GetXaxis()->GetNdivisions() << std::endl;
     h_Nom->SetTitle("");
     h_Nom->GetYaxis()->SetTitle("Ratio to Nominal");
   //  h_Nom->SetMaximum( std::max(h_QUp->GetMaximum(),
@@ -73,14 +78,12 @@ void plot_7point(TString folder= "theoVariation_171019"){
     h_Nom->SetMinimum(min_def);
     h_Nom->SetMaximum(max_def);
 
-    const int num = 5;
-  TString Ax_SR[num] = {"0.8 TeV < m_{jj} < 1 TeV","1 TeV < m_{jj} < 1.5 TeV","1.5 TeV < m_{jj} < 2 TeV", "2 < m_{jj} < 3.5 TeV", "m_{jj} > 3.5 TeV"};
+
   for (int i=1; i<=num; i++) {
     h_Nom->SetBinContent(i, 0);
     h_Nom->SetBinError(i, 0);
     h_Nom->GetXaxis()->SetBinLabel(i,Ax_SR[i-1]);
   }
-
 
 
   TCanvas *c = new TCanvas( Form("SystVar%d",ifile) , "SystVar" );
@@ -90,14 +93,14 @@ void plot_7point(TString folder= "theoVariation_171019"){
 
   h_Nom->Draw();
 
-  TH1F* envHi =  new TH1F("envhi", "envhi", num,800 , 2500);
+  /*TH1F* envHi =  new TH1F("envhi", "envhi", num,800 , 2500);
   TH1F* envLo =  new TH1F("envhi", "envhi", num,800 , 2500);
   for (int j = 1; j <= num; ++j) {
     double yHi = h_EnvDown->GetBinContent(j); //cout << envHi->GetBinContent(j) << " -> " << yHi << endl;
     double yLow = h_EnvUp->GetBinContent(j); //cout << envLo->GetBinContent(j) << " -> " << yLow << endl;
     envHi->SetBinContent(j, yHi);
     envLo->SetBinContent(j, yLow);
-  }
+  }*/
 
   TH1F* quadUp =  new TH1F("quadUp", "quadUp", num,800 , 2500);
   TH1F* quadLo =  new TH1F("quadLo", "quadLo", num,800 , 2500);
@@ -116,34 +119,36 @@ void plot_7point(TString folder= "theoVariation_171019"){
    quadLo->SetLineStyle(7);
 
 
-   envHi->SetLineColor(kGray);
+   /*envHi->SetLineColor(kGray);
   //envHi->SetFillColor(kGray);
-   envHi->Draw("hist same");
+   envHi->Draw("hist same");*/
 
    h_FDown->Draw("HIST  SAME");
    h_RDown->Draw("HIST  SAME");
    h_QDown->Draw("HIST  SAME");
+   h_EnvDown->Draw("HIST  SAME");
 
-   TH1F* whitearea =  new TH1F("whitearea", "whitearea", num,800 , 2500);;
+   /*TH1F* whitearea =  new TH1F("whitearea", "whitearea", num,800 , 2500);;
    for (int j = 1; j <= num; ++j) {
      whitearea->SetBinContent(j, h_EnvUp->GetBinContent(j));
      //cout << whitearea->GetBinContent(j)<< endl;
    }
    whitearea->SetFillColorAlpha(kWhite, 0);
    whitearea->SetFillColor(kWhite);
-   whitearea->SetLineColor(kGray);
+   whitearea->SetLineColor(kGray);*/
 //whitearea->Draw("hist same");
    h_QUp->Draw("HIST  SAME");
    h_FUp->Draw("HIST  SAME");
    h_RUp->Draw("HIST  SAME");
+   h_EnvUp->Draw("HIST  SAME");
    quadUp->Draw("HIST  SAME");
    quadLo->Draw("HIST  SAME");
+
 
    h_Nom->Draw("AXIS same");
   //  ATLASLabel(0.20,0.87,true);
 
-   //  TLegend *legend=new TLegend(0.70,0.30,0.90,0.85);
-   TLegend *legend=new TLegend(0.69,0.68,0.92,0.94);
+   TLegend *legend=new TLegend(0.60,0.54,0.89,0.9);
    legend->SetTextFont(62);
    legend->SetTextSize(0.04);
    legend->SetHeader(files[ifile]);
@@ -155,7 +160,9 @@ void plot_7point(TString folder= "theoVariation_171019"){
    legend->AddEntry(h_RDown, "#mu_{R}=0.5","lp");
    legend->AddEntry(h_QUp, "#mu_{F}=2,#mu_{R}=2","lp");
    legend->AddEntry(h_QDown, "#mu_{F}=0.5,#mu_{R}=0.5","lp");
-   legend->AddEntry(quadUp, "(#mu_{F},#mu_{R}) quad","lp");
+   legend->AddEntry(h_EnvUp, "PDF up","lp");
+   legend->AddEntry(h_EnvDown, "PDF down","lp");
+   //legend->AddEntry(quadUp, "(#mu_{F},#mu_{R}) quad","lp");
   //legend->AddEntry(envHi, "Envelope","f");
    legend->Draw();
 

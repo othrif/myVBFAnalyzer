@@ -6,3 +6,9 @@
 *_C.so
 *.pcm
 *.pdf
+*.so
+*.d 
+*.pcm 
+*~
+*.nfs*
+^#

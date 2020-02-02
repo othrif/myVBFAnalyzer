@@ -1,6 +1,4 @@
-# This script is used to compute the MC uncertainties on the sherpa samples in the monojet analysis regions
-
-# used only for ckkw
+# used for ckkw and qsf
 
 #################### Global settings
 import math
@@ -65,9 +63,16 @@ def getQSFUnc(sample, region_mjj):
 
 def getUncShape(samples, regions):
   mergedict = {}
+  mergedictIncl = {}
   for sample in samples:
     mergedict[sample] = {}
+    mergedictIncl[sample] = {}
     for region in regions:
+      mergedictIncl[sample][region] = {}
+      ckkw15_incl=0
+      ckkw30_incl=0
+      qsf15_incl=0
+      qsf30_incl=0
       for bin_mjj in bins_mjj:
         region_mjj = region+'_'+bin_mjj
         mergedict[sample][region_mjj]={}
@@ -82,6 +87,7 @@ def getUncShape(samples, regions):
           qsf15=0
           qsf30=0
           qsf=0
+          #print sample, region_mjj
         else:
           ckkw15,ckkw30,ckkw15_var,ckkw30_var,ckkw = getCKKWUnc(sample, region_mjj)
           qsf15,qsf30,qsf15_var,qsf30_var,qsf = getQSFUnc(sample, region_mjj)
@@ -98,8 +104,17 @@ def getUncShape(samples, regions):
         mergedict[sample][region_mjj]['qsf30']=qsf30_var/nominal
         mergedict[sample][region_mjj]['qsf']=qsf
 
-  return mergedict
+        ckkw15_incl+=sherpa.evts[sample][region_mjj]['weight_ckkw15'][0]
+        ckkw30_incl+=sherpa.evts[sample][region_mjj]['weight_ckkw30'][0]
+        qsf15_incl+=sherpa.evts[sample][region_mjj]['weight_qsf025'][0]
+        qsf30_incl+=sherpa.evts[sample][region_mjj]['weight_qsf4'][0]
 
+      if (ckkw15_incl!=0 and ckkw30_incl!=0):
+        mergedictIncl[sample][region]['ckkw'] = abs(ckkw15_incl-ckkw30_incl)/(ckkw15_incl+ckkw30_incl)
+      if (qsf15_incl!=0 and qsf30_incl!=0):
+         mergedictIncl[sample][region]['qsf'] = abs(qsf15_incl-qsf30_incl)/(qsf15_incl+qsf30_incl)
+
+  return mergedict,mergedictIncl
 
 
 def getUncShapeReduced(unc, samples, regions ):
@@ -206,7 +221,6 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
           histo.GetXaxis().SetNdivisions(505, True)
           histo.GetYaxis().SetTitle('Relative uncertainty')
           histo.GetYaxis().SetRangeUser(0.0, 0.1)
-
         if j==0:
           print '}'
           histo.Draw('PhistL')
@@ -218,7 +232,7 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
       histo_saver.append(legend)
       legend.Draw('same')
       c.SetGridy()
-      c.SaveAs('systPlots/'+sample+'_'+region+'_'+suffix+'.pdf')
+      c.SaveAs('systPlots/'+NP+'_'+sample+'_'+region+'_'+suffix+'.pdf')
 
 def makeVariationPlots(samples, regions, variations, var_label):
   # plot the uncertainty vs mjj bins for each sample in each region do this for a given NP
@@ -273,7 +287,7 @@ def makeVariationPlots(samples, regions, variations, var_label):
       c.SetGridy()
       c.SetLogy()
       #c.SetLogx()
-      c.SaveAs('variations/'+sample+'_'+region+'_'+suffix+'_'+var_label+'.pdf')
+      c.SaveAs('variations/'+NP+'_'+sample+'_'+region+'_'+suffix+'_'+var_label+'.pdf')
 
 
 
@@ -293,14 +307,53 @@ def makePrintOut(unc, NPs, samples, regions):
 if __name__ == "__main__":
 
     print "starting to process...."
-    unc = getUncShape(samples, regions)
+    unc,unc_incl = getUncShape(samples, regions)
     unc_reduced = getUncShapeReduced(unc, samples, regions)
     # ckkw
-    makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
-    makePlots(unc, ['ckkw'], ['ckkw15_RAW'],['ckkw30_RAW'], samples, regions)
-    makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
+    #makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
+    #makePlots(unc, ['ckkw'], ['ckkw15_RAW'],['ckkw30_RAW'], samples, regions)
+    #makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
     # qsf
-    makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
-    makePlots(unc, ['qsf'], ['qsf15_RAW'],['qsf30_RAW'], samples, regions)
-    makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
+    #makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
+    #makePlots(unc, ['qsf'], ['qsf15_RAW'],['qsf30_RAW'], samples, regions)
+    #makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
 
+    for j,region in enumerate(['SR','CRW','CRZ']):
+      for jj,updn in enumerate(['up','down']):
+        print region+updn
+        for i,NP in enumerate(['qsf','ckkw']):
+          for l,sample in enumerate(['Z_strong','W_strong']):
+            if sample == 'Z_strong' and region == 'CRW' or sample == 'W_strong' and region == 'CRZ':
+              continue
+            print NP+"_"+sample,
+            for k,binn in enumerate(['PhiLow','PhiHigh']):
+              for m,bin_mjj in enumerate(bins_mjj):
+                if updn == 'up':
+                  print str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                elif updn == 'down':
+                  print str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+            if updn == 'up':
+              print round(1+unc_incl[sample][region][NP],4)
+            elif updn == 'down':
+              print round(1-unc_incl[sample][region][NP],4)
+           # print ""
+
+    for j,region in enumerate(['SR','CRW','CRZ']):
+      for jj,updn in enumerate(['up','down']):
+        print region+updn
+        for l,sample in enumerate(['Z_strong','W_strong']):
+          if sample == 'Z_strong' and region == 'CRW' or sample == 'W_strong' and region == 'CRZ':
+            continue
+          for k,binn in enumerate(['PhiLow','PhiHigh']):
+            for i,NP in enumerate(['qsf','ckkw']):
+              for m,bin_mjj in enumerate(bins_mjj):
+                if updn == 'up':
+                  print str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                elif updn == 'down':
+                  print str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+            if updn == 'up':
+              print round(1+unc_incl[sample][region][NP],4)
+            elif updn == 'down':
+              print round(1-unc_incl[sample][region][NP],4)
+           # print ""
+  outFile = TFile("test.root", "recreate")

@@ -1,4 +1,4 @@
-void plot_env_stat(TString folder= "theoVariation_300919"){
+void plot_env_stat(TString folder= "theoVariation_171019"){
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);
