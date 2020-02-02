@@ -329,9 +329,9 @@ if __name__ == "__main__":
             for k,binn in enumerate(['PhiLow','PhiHigh']):
               for m,bin_mjj in enumerate(bins_mjj):
                 if updn == 'up':
-                  print str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                  sys.stdout.write(str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",)
                 elif updn == 'down':
-                  print str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                  sys.stdout.write(str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",)
             if updn == 'up':
               print round(1+unc_incl[sample][region][NP],4)
             elif updn == 'down':
@@ -348,12 +348,12 @@ if __name__ == "__main__":
             for i,NP in enumerate(['qsf','ckkw']):
               for m,bin_mjj in enumerate(bins_mjj):
                 if updn == 'up':
-                  print str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                  sys.stdout.write(str(round(1+unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",)
                 elif updn == 'down':
-                  print str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",
+                  sys.stdout.write(str(round(1-unc[sample][region+binn+'_'+bin_mjj][NP],4))+",",)
             if updn == 'up':
               print round(1+unc_incl[sample][region][NP],4)
             elif updn == 'down':
               print round(1-unc_incl[sample][region][NP],4)
            # print ""
-  outFile = TFile("test.root", "recreate")
+outFile = TFile("test.root", "recreate")
