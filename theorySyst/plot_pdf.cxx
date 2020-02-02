@@ -1,10 +1,10 @@
 // Plot all the pdf variations
 // root plot_pdf.cxx
 // Change path
-void plot_pdf(TString folder= "theoVariation_171019"){
+void plot_pdf(TString folder= "theoVariation_met160_020220"){
 
   TString procV = "strong"; // strong, EWK
-  TString region = "Njet"; // PhiHigh, PhiLow, Njet
+  TString region = "PhiHigh"; // PhiHigh, PhiLow, Njet
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);
@@ -122,13 +122,11 @@ region = "WCR";
    //h_RDown->Draw("HIST  SAME");
    //h_QDown->Draw("HIST  SAME");
 
-   std::cout << "test1" << std::endl;
    TH1F* whitearea =  new TH1F("whitearea", "whitearea", num,1000 , 2500);;
    for (int j = 1; j <= num; ++j) {
      whitearea->SetBinContent(j, h_EnvUp->GetBinContent(j));
      cout << whitearea->GetBinContent(j)<< endl;
    }
-   std::cout << "test2" << std::endl;
    whitearea->SetFillColorAlpha(kWhite, 0);
    whitearea->SetFillColor(kWhite);
    whitearea->SetLineColor(kGray);
@@ -140,7 +138,6 @@ region = "WCR";
    //quadLo->Draw("HIST  SAME");
 
    h_Nom->Draw("AXIS same");
-   std::cout << "test3" << std::endl;
   //  ATLASLabel(0.20,0.87,true);
 
    //  TLegend *legend=new TLegend(0.70,0.30,0.90,0.85);
@@ -153,12 +150,10 @@ region = "WCR";
    legend->AddEntry(h_FDown, "pdf dn","lp");
    legend->Draw();
 
-   std::cout << "test4" << std::endl;
    TF1 *line = new TF1("line","1",-100000,100000);
    line->SetLineColor(kBlack);
    line->SetLineWidth(1);
    line->Draw("same");
-   std::cout << "test5" << std::endl;
 /*
  TLatex *xlabel = new TLatex();
  xlabel-> SetNDC();
@@ -171,7 +166,7 @@ region = "WCR";
 std::cout << "test6" << std::endl;
 */
   // Write
-   c->Print( "/Users/othmanerifki/vbf/systematics/theoUnc_7bin/output/"+folder+"/plots/pdf/"+files[ifile]+"_"+region+".pdf");
+   c->Print( "./output/"+folder+"/plots/pdf/"+files[ifile]+"_"+region+".pdf");
   //c->Write();
   //fFinal->Close();
 

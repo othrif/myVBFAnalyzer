@@ -43,8 +43,7 @@ binItrPDF = 0
 binItr ={}
 binItr["resum"] = 0
 binItr["ckkw"] = 0
-#listRegions=[region + "PhiLow", region + "PhiHigh", region + "Njet"]
-listRegions=[region, region, region + "Njet"]
+listRegions=[region + "PhiLow", region + "PhiHigh", region + "Njet"]
 if region == "Incl":
     listRegions=[region, region, region]
 for reg in listRegions:
@@ -90,6 +89,22 @@ for reg in listRegions:
     inFile.Close()
     outFile.Close()
 
+
+    # varied samples
+    for key in ["qsf025", "qsf4", "ckkw15", "ckkw30"]:
+        print "Not using", key
+'''
+        inFile = TFile.Open(basePath+"/theoVariation_"+channel+"_"+key+".root")
+        outFile = TFile(outPath+"/variedYields_"+channel+"_"+reg+".root", "update")
+        thisHist = inFile.Get("jj_mass_" + reg + "_nominal")
+        if(len(thisHist.GetSumw2()) == 0):
+            thisHist.Sumw2()
+        varDict[key] = thisHist.Clone("h_" + key)
+        varDict[key].SetDirectory(0)
+        varDict[key].Write()
+        inFile.Close()
+        outFile.Close()
+'''
     ########################
     # Nominal
     ########################
@@ -277,11 +292,11 @@ for reg in listRegions:
             continue
         pdfError[i] = math.sqrt(pdfYieldSq[i] - (pdfYield[i] * pdfYield[i]))
         tmp_pdfVar[i] = pdfError[i]/pdfYield[i]
-        if (debug): print "PDF variation in bin %i: %f %% +- %f %%" % (i, tmp_pdfVar[i]*100, pdfError[i]*100)
+        if (debug): print "PDF variation in bin %i: %f %%" % (i, tmp_pdfVar[i]*100)
         pdf_up.SetBinContent(  i+1, 1 + tmp_pdfVar[i])
         pdf_down.SetBinContent(i+1, 1 - tmp_pdfVar[i])
-        pdf_up.SetBinError(  i+1, pdfError[i])
-        pdf_down.SetBinError(i+1, pdfError[i])
+        pdf_up.SetBinError(  i+1, err_pdfYield[i])
+        pdf_down.SetBinError(i+1, err_pdfYield[i])
         if binItrPDF < 10:
             theoUncUp["pdf"][binItrPDF]   = 1 + tmp_pdfVar[i]
             theoUncDown["pdf"][binItrPDF] = 1 - tmp_pdfVar[i]
@@ -291,6 +306,74 @@ for reg in listRegions:
     theoUncDown["pdf"][binItrPDF] = 1 - pdfErrorIncl/pdfYieldIncl
     pdf_up.Write()
     pdf_down.Write()
+
+'''
+    ########################
+    # qsf/ckkw variations
+    ########################
+    for wVar in ["resum", "ckkw"]:
+        avgNormalization = 1./2
+        qsfckkwYield = [0.,0.,0.,0.,0.]
+        qsfckkwYieldSq = [0.,0.,0.,0.,0.]
+        qsfckkwYieldIncl = 0.
+        qsfckkwYieldSqIncl = 0.
+        err_qsfckkwYield = [0.,0.,0.,0.,0.]
+        err_qsfckkwYieldIncl = 0.
+        if wVar == "resum":
+            wList = ["qsf025", "qsf4"]
+        elif wVar == "ckkw":
+            wList = ["ckkw15", "ckkw30"]
+        for i in wList:
+            thisHist = inFile.Get("h_"+i)
+            thisYield = [0.,0.,0.,0.,0.]
+            err_thisYield = [0.,0.,0.,0.,0.]
+            thisYieldIncl = 0.
+            err_thisYieldIncl = 0.
+            for iBin in range(thisHist.GetNbinsX()+1):
+                binIndex = 0
+                binCenter = thisHist.GetBinCenter(iBin+1)
+                if binCenter < mjj_bins[0]:
+                    continue
+                while binIndex < 4:
+                    if binCenter >= mjj_bins[binIndex] and binCenter < mjj_bins[binIndex+1] :
+                        break
+                    binIndex = binIndex + 1
+                thisYield[binIndex] += thisHist.GetBinContent(iBin+1)
+                thisYieldIncl += thisHist.GetBinContent(iBin+1)
+                err_thisYield[binIndex] += thisHist.GetBinError(iBin+1)*thisHist.GetBinError(iBin+1)
+                err_thisYieldIncl += thisHist.GetBinError(iBin+1)*thisHist.GetBinError(iBin+1)
+            for j in range(nbins):
+                qsfckkwYield[j]    += avgNormalization * thisYield[j]
+                qsfckkwYieldSq[j]  += avgNormalization * thisYield[j] * thisYield[j]
+                err_qsfckkwYield[j] = avgNormalization * math.sqrt(err_thisYield[binIndex])
+            qsfckkwYieldIncl   += avgNormalization * thisYieldIncl
+            qsfckkwYieldSqIncl += avgNormalization * thisYieldIncl * thisYieldIncl
+            err_qsfckkwYieldIncl = avgNormalization * math.sqrt(err_thisYieldIncl)
+        qsfckkw_up   = TH1F(wVar+"_up",   wVar+" up reweight",   nbins, array('d',mjj_bins_xaxis))
+        qsfckkw_down = TH1F(wVar+"_down", wVar+" down reweight", nbins, array('d',mjj_bins_xaxis))
+        qsfckkwError = [0.,0.,0.,0.,0.]
+        tmp_qsfckkwVar=[0.,0.,0.,0.,0.]
+        for i in range(nbins) :
+            if(qsfckkwYield[i] == 0):
+                if(debug): print " yield is zero for bin %i"%i
+                continue
+            qsfckkwError[i] = math.sqrt(qsfckkwYieldSq[i] - (qsfckkwYield[i] * qsfckkwYield[i]))
+            tmp_qsfckkwVar[i] = qsfckkwError[i]/qsfckkwYield[i]
+            if (debug):  print wVar+" variation in bin %i: %f %%" % (i, tmp_qsfckkwVar[i]*100)
+            qsfckkw_up.SetBinContent(  i+1, 1 + tmp_qsfckkwVar[i])
+            qsfckkw_down.SetBinContent(i+1, 1 - tmp_qsfckkwVar[i])
+            qsfckkw_up.SetBinError(  i+1, err_qsfckkwYield[i])
+            qsfckkw_down.SetBinError(i+1, err_qsfckkwYield[i])
+            if binItr[wVar] < 10:
+                theoUncUp[wVar][binItr[wVar]]   = 1 + tmp_qsfckkwVar[i]
+                theoUncDown[wVar][binItr[wVar]] = 1 - tmp_qsfckkwVar[i]
+                binItr[wVar] = binItr[wVar]+1
+        qsfckkwErrorIncl = math.sqrt(qsfckkwYieldSqIncl - (qsfckkwYieldIncl * qsfckkwYieldIncl))
+        theoUncUp[wVar][binItr[wVar]]   = 1 + qsfckkwErrorIncl/qsfckkwYieldIncl
+        theoUncDown[wVar][binItr[wVar]] = 1 - qsfckkwErrorIncl/qsfckkwYieldIncl
+        qsfckkw_up.Write()
+        qsfckkw_down.Write()
+'''
 inFile.Close()
 outFile.Close()
 

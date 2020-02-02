@@ -2,7 +2,7 @@
 // 1 > Rel21
 // 2 > Rel20
 
-void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "Njet"){
+void plot_TF_unc(TString folder= "theoVariation_met160_020220",TString procV = "strong", TString region = "PhiHigh"){
 
   using namespace TMath;
 
@@ -26,7 +26,7 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
   TString legend_files[] = {"Z "+procV+" SR","Z "+procV+" CRZ","W "+procV+" SR","W "+procV+" CRW"};
 
 
-  TString var[] = {"envelope"};
+  TString var[] = {"pdf"};
   int numvars =1;
 
   double uncStatOld[numfiles][numbins], uncStatOld_up[numfiles][numbins], uncStatOld_dn[numfiles][numbins], uncSysOld_up[numfiles][numbins], uncSysOld_dn[numfiles][numbins];
