@@ -2,7 +2,7 @@
 // 1 > Rel21
 // 2 > Rel20
 
-void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "PhiLow"){
+void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", TString region = "Njet"){
 
   using namespace TMath;
 
@@ -53,14 +53,18 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
 
       TH1F  *h_Error = (TH1F*)fInError->Get( "h_nominal" );
       TAxis *axis = h_Error->GetXaxis();
-      double err[3],bin[3];
-      bin[0] = h_Error->IntegralAndError(axis->FindBin(1),axis->FindBin(1.5),err[0]);
-      bin[1] = h_Error->IntegralAndError(axis->FindBin(1.5),axis->FindBin(2),err[1]);
-      bin[2] = h_Error->IntegralAndError(axis->FindBin(2),h_Error->GetNbinsX()+1,err[2]);
+      double err[numbins],bin[numbins];
+      bin[0] = h_Error->IntegralAndError(axis->FindBin(0.8),axis->FindBin(1),err[0]);
+      bin[1] = h_Error->IntegralAndError(axis->FindBin(1),axis->FindBin(1.5),err[1]);
+      bin[2] = h_Error->IntegralAndError(axis->FindBin(1.5),axis->FindBin(2),err[2]);
+      bin[3] = h_Error->IntegralAndError(axis->FindBin(2),axis->FindBin(3.5),err[3]);
+      bin[4] = h_Error->IntegralAndError(axis->FindBin(3.5),h_Error->GetNbinsX()+1,err[4]);
 
       uncStatOld[ifile][0] = err[0]/bin[0];
       uncStatOld[ifile][1] = err[1]/bin[1];
       uncStatOld[ifile][2] = err[2]/bin[2];
+      uncStatOld[ifile][3] = err[3]/bin[3];
+      uncStatOld[ifile][4] = err[4]/bin[4];
 
     }
 
@@ -88,7 +92,7 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
     double B = uncSysOld_up[1][i];
     double dB = uncStatOld_up[1][i];
     double tmp_tf = fabs((A)/(B)-1)*100.0;
-    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2))*100;
+    double tmp_tf_stat = fabs(Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2)));//*100;
     std::cout << "UP: Z SR: " << A << " +- " << dA << ", Z CR: " << B << " +- " << dB << std::endl;
     std::cout << "UP: Z_SR/Z_CR: " << tmp_tf << " +- " << tmp_tf_stat << std::endl;
     h_Z->SetBinContent(i+1, tmp_tf);
@@ -115,7 +119,7 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
     double B = uncSysOld_dn[1][i];
     double dB = uncStatOld_dn[1][i];
     double tmp_tf = fabs((A)/(B)-1)*100.0;
-    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2))*100;
+    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2));//*100;
     std::cout << "DN: Z SR: " << A << " +- " << dA << ", Z CR: " << B << " +- " << dB << std::endl;
     std::cout << "DN: Z_SR/Z_CR: " << tmp_tf << " +- " << tmp_tf_stat << std::endl;
     h_Z_dn->SetBinContent(i+1, tmp_tf);
@@ -157,7 +161,7 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
     double B = uncSysOld_up[3][i];
     double dB = uncStatOld_up[3][i];
     double tmp_tf = fabs((A)/(B)-1)*100.0;
-    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2))*100;
+    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2));//*100;
     std::cout << "UP: W SR: " << A << " +- " << dA << ", W CR: " << B << " +- " << dB << std::endl;
     std::cout << "UP: W_SR/Z_CR: " << tmp_tf << " +- " << tmp_tf_stat << std::endl;
     h_W->SetBinContent(i+1, tmp_tf);
@@ -184,7 +188,7 @@ void plot_TF_unc(TString folder= "theoVariation_171019",TString procV = "EWK", T
     double B = uncSysOld_dn[3][i];
     double dB = uncStatOld_dn[3][i];
     double tmp_tf = fabs((A)/(B)-1)*100.0;
-    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2))*100;
+    double tmp_tf_stat = Sqrt(Power(dA/B,2)+Power(A*dB/(B*B),2));//*100;
     std::cout << "DN: W SR: " << A << " +- " << dA << ", W CR: " << B << " +- " << dB << std::endl;
     std::cout << "DN: W_SR/Z_CR: " << tmp_tf << " +- " << tmp_tf_stat << std::endl;
     h_W_dn->SetBinContent(i+1, tmp_tf);
