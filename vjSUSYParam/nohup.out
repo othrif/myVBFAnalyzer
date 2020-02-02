@@ -1,0 +1,30 @@
+Info in <TCanvas::Print>: pdf file systPlots/Z_strong_SR_mc16ade.pdf has been created
+Info in <TCanvas::Print>: pdf file systPlots/Z_strong_CRZ_mc16ade.pdf has been created
+Info in <TCanvas::Print>: pdf file systPlots/Z_strong_SR_mc16ade.pdf has been created
+Info in <TCanvas::Print>: pdf file systPlots/Z_strong_CRZ_mc16ade.pdf has been created
+[?1034hApplying ATLAS style settings...
+starting to process....
+***************************************
+Working on  Z_strong region SR
+***************************************
+
+Z_strong_ckkw = {'SR': {"800": 0.0413245500143, "1000": 0.0402689500521, "1500": 0.0381152724086, "2000": 0.0357162899457, "3500": 0.020657746747}}
+(Min-Highest)% 2.0657746747 - 4.13245500143
+***************************************
+Working on  Z_strong region CRZ
+***************************************
+
+Z_strong_ckkw = {'CRZ': {"800": 0.047489681234, "1000": 0.0470160366306, "1500": 0.0442718575109, "2000": 0.04085092337, "3500": 0.0284764738119}}
+(Min-Highest)% 2.84764738119 - 4.7489681234
+***************************************
+Working on  Z_strong region SR
+***************************************
+
+Z_strong_qsf = {'SR': {"800": 0.0460769112599, "1000": 0.0448212698963, "1500": 0.0411509295059, "2000": 0.0392388461002, "3500": 0.028432570182}}
+(Min-Highest)% 2.8432570182 - 4.60769112599
+***************************************
+Working on  Z_strong region CRZ
+***************************************
+
+Z_strong_qsf = {'CRZ': {"800": 0.0559071449043, "1000": 0.0510489201914, "1500": 0.045837664184, "2000": 0.0420336370584, "3500": 0.0279393739291}}
+(Min-Highest)% 2.79393739291 - 5.59071449043

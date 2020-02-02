@@ -135,17 +135,26 @@ def makeTableDict(mergedict, what='ckkw', nametable='ckkw_reduced_prelim'):
    f.close()
 
 def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
+
+  f=open('python/dict_syst_qsf_ckkw.py', 'a')
+  #f.write('\ndict_syst = {}\n')
   # plot the uncertainty vs mjj bins for each sample in each region do this for a given NP
   histo_saver = []
 
-  for sample_region in samples_regions:
+  for j,NP in enumerate(NPs):
+    f.write('\ndict_syst["'+NP+'"] = {}\n')
+    for k,sample in enumerate(samples):
+      f.write('\ndict_syst["'+NP+'"]["'+str(sample)+'"] = {}\n')
+
+  for idx,sample_region in enumerate(samples_regions):
       sample,region = sample_region.split('+')
       print '***************************************'
       print 'Working on ', sample, 'region', region
       print '***************************************'
-
       name = '%s' % (sample_region)
-      c = TCanvas(name, name, 600, 600)
+      #c = TCanvas(name, name, 600, 600)
+      #if idx ==0:
+      #    f.write('\ndict_syst["'+NP+'"]["'+str(sample)+'"] = {}\n')
 
       legend = TLegend(0.40,0.70,0.70,0.9,'')
 
@@ -157,7 +166,7 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
         histo = TH1F(namehisto, namehisto, bins_n, bins)
         lowestSyst  = 9999
         highestSyst = -9999
-        sys.stdout.write(str(sample))
+        sys.stdout.write('\n'+str(sample)+'_'+NP)
         sys.stdout.write(' = ')
         sys.stdout.write('{')
 
@@ -166,12 +175,26 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
         sys.stdout.write('\'')
         sys.stdout.write(': {')
 
+        #f.write('\n'+str(sample))
+        f.write('\ndict_syst["'+NP+'"]["'+str(sample)+'"]["'+str(region)+'"]={')
+        #f.write(' = ')
+        #f.write('{')
+
+        #f.write('\'')
+        #f.write(str([region])[2 :-2: ])
+        #f.write('\'')
+        #f.write(': {')
+
         for i,bin_mjj in enumerate(bins_mjj):  # this is the binning of the fit,
           sys.stdout.write('"')
           sys.stdout.write(str(bin_mjj))
           sys.stdout.write('": ')
+          f.write('"')
+          f.write(str(bin_mjj))
+          f.write('": ')
           if (str(sample)+'+'+str([region])[2 :-2: ] in samples_regionsToRaw):
             sys.stdout.write(str(unc[sample][region+'_'+bin_mjj][NP]))
+            f.write(str(unc[sample][region+'_'+bin_mjj][NP]))
             if lowestSyst > unc[sample][region+'_'+bin_mjj][NP]:
               lowestSyst = unc[sample][region+'_'+bin_mjj][NP]
             if highestSyst < unc[sample][region+'_'+bin_mjj][NP]:
@@ -184,14 +207,17 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
               totalRawHigh+= float(unc[sample][region+'_'+bin_mjj2]['ckkw30_RAW'])
             smoothed = abs(totalRawLow-totalRawHigh)/(totalRawLow+totalRawHigh)
             sys.stdout.write(str(smoothed))
+            f.write(str(smoothed))
             lowestSyst = smoothed
             highestSyst = smoothed
           elif (str(sample)+'+'+str([region])[2 :-2: ] in samples_regionsToZero):
             sys.stdout.write('0')
+            f.write('0')
             lowestSyst = 0
             highestSyst = 0
           if (i+1) != len(bins_mjj):
             sys.stdout.write(', ')
+            f.write(', ')
 
           histo.SetBinContent(i+1, unc[sample][region+'_'+bin_mjj][NP])
 
@@ -207,18 +233,22 @@ def makePlots(unc, NPs,NPRawLow,NPRawHigh, samples, regions):
           histo.GetYaxis().SetTitle('Relative uncertainty')
           histo.GetYaxis().SetRangeUser(0.0, 0.1)
 
+        sys.stdout.write('}')
+        f.write('}\n')
         if j==0:
           print '}'
-          histo.Draw('PhistL')
-        else:
-          histo.Draw('PhistsameL')
-        legend.AddEntry(histo.GetName(),histo.GetName(), 'LP')
+          #f.write('}\n')
+          #histo.Draw('PhistL')
+        #else:
+          #histo.Draw('PhistsameL')
+        #legend.AddEntry(histo.GetName(),histo.GetName(), 'LP')
         histo_saver.append(histo)
+
         print '(Min-Highest)%',lowestSyst*100,'-',highestSyst*100
       histo_saver.append(legend)
-      legend.Draw('same')
-      c.SetGridy()
-      c.SaveAs('systPlots/'+sample+'_'+region+'_'+suffix+'.pdf')
+      #legend.Draw('same')
+      #c.SetGridy()
+      #c.SaveAs('systPlots/'+sample+'_'+region+'_'+suffix+'.pdf')
 
 def makeVariationPlots(samples, regions, variations, var_label):
   # plot the uncertainty vs mjj bins for each sample in each region do this for a given NP
@@ -268,15 +298,12 @@ def makeVariationPlots(samples, regions, variations, var_label):
         histo_saver.append(histo)
 
       histo_saver.append(legend)
-      legend.Draw('same')
+      #legend.Draw('same')
 
       c.SetGridy()
       c.SetLogy()
       #c.SetLogx()
       c.SaveAs('variations/'+sample+'_'+region+'_'+suffix+'_'+var_label+'.pdf')
-
-
-
 
 def makePrintOut(unc, NPs, samples, regions):
 
@@ -295,12 +322,15 @@ if __name__ == "__main__":
     print "starting to process...."
     unc = getUncShape(samples, regions)
     unc_reduced = getUncShapeReduced(unc, samples, regions)
+    f=open('python/dict_syst_qsf_ckkw.py', 'w')
+    f.write('\ndict_syst = {}\n')
+    f.close()
     # ckkw
-    makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
+    #makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
     makePlots(unc, ['ckkw'], ['ckkw15_RAW'],['ckkw30_RAW'], samples, regions)
-    makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
+    #makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
     # qsf
-    makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
+    #makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
     makePlots(unc, ['qsf'], ['qsf15_RAW'],['qsf30_RAW'], samples, regions)
-    makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
+    #makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
 
