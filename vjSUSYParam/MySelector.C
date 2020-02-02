@@ -167,7 +167,7 @@ Bool_t MySelector::Process(Long64_t entry)
 
    // Define regions
   Float_t met_to_use = 0;
-  float METCut = 150.0e3;
+  float METCut = 160.0e3;
   float LeadJetPtCut = 80.0e3;
   float subLeadJetPtCut = 50.0e3;
   float MjjCut =2e5;
