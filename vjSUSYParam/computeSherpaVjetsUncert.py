@@ -310,13 +310,13 @@ if __name__ == "__main__":
     unc,unc_incl = getUncShape(samples, regions)
     unc_reduced = getUncShapeReduced(unc, samples, regions)
     # ckkw
-    #makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
-    #makePlots(unc, ['ckkw'], ['ckkw15_RAW'],['ckkw30_RAW'], samples, regions)
-    #makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
+    makeTableDict(unc_reduced, what='ckkw',  nametable='ckkw_reduced_prelim')
+    makePlots(unc, ['ckkw'], ['ckkw15_RAW'],['ckkw30_RAW'], samples, regions)
+    makeVariationPlots(samples, regions, ['Nominal', 'weight_ckkw15', 'weight_ckkw30'],'ckkw')
     # qsf
-    #makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
-    #makePlots(unc, ['qsf'], ['qsf15_RAW'],['qsf30_RAW'], samples, regions)
-    #makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
+    makeTableDict(unc_reduced, what='qsf',  nametable='qsf_reduced_prelim')
+    makePlots(unc, ['qsf'], ['qsf15_RAW'],['qsf30_RAW'], samples, regions)
+    makeVariationPlots(samples, regions, ['Nominal', 'weight_qsf025', 'weight_qsf4'],'qsf')
 
     for j,region in enumerate(['SR','CRW','CRZ']):
       for jj,updn in enumerate(['up','down']):
