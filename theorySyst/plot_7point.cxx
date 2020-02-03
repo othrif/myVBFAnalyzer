@@ -1,10 +1,7 @@
 // Plot the 7 point variation, the envelope is not working
 // root plot_7point.cxx
 // Change path
-void plot_7point(TString folder= "theoVariation_171019"){
-
-  TString procV = "EWK"; // strong, EWK
-  TString region = "PhiLow"; // PhiHigh, PhiLow, Njet
+void plot_7point(TString folder= "theoVariation_met160_020220", TString procV = "EWK", TString region = "PhiLow"){
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);

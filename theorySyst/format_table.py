@@ -2,7 +2,7 @@
 
 regs=["SR", "CRW", "CRZ"]
 procDict={"W_EWK":"EWK W", "Z_EWK":"EWK Z", "W_strong":"Strong W", "Z_strong":"Strong Z"}
-vars=["renofact","pdf","resum","ckkw"]
+vars=["renofact","pdf","qsf","ckkw"]
 
 for var in vars:
     print("\n{}".format(var))

@@ -3,7 +3,7 @@
 // Change path
 //strong, EWK
 // PhiHigh, PhiLow, Njet
-void plot_7point_pdf(TString folder= "theoVariation_met160_020220",TString procV = "EWK", TString region = "PhiLow"){
+void plot_7point_pdf(TString folder= "theoVariation_met160_020220",TString procV = "EWK", TString region = "PhiHigh"){
 
   //  SetAtlasStyle();
   gStyle->SetMarkerSize(0.9);
