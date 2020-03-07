@@ -14,8 +14,8 @@ from array import array
 # Incl, SRPhiHigh, CRWPhiHigh, CRZPhiHigh, SRPhiLow, CRWPhiLow, CRZPhiLow, SRNjet, CRWNjet, CRZNjet
 
 debug = True
-basePath = "/Users/othmanerifki/vbf/theoVariation_met160_020220"
-outPath = "./output/theoVariation_met160_020220"
+basePath = "./input/theoryVariation/"
+outPath = "./output/theoryVariation/"
 
 if not os.path.exists(outPath):
     os.makedirs(outPath)
@@ -30,12 +30,18 @@ print "\nRunning systs for channel:", channel, region
 # renofact, pdf, resum, ckkw
 
 theoUncUp= {     "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "fac"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "renorm"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "both"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 theoUncDown= {   "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "fac"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "renorm"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "both"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 
 binItrScale = 0
@@ -136,6 +142,7 @@ for reg in listRegions:
     # Scale variations
     ########################
     for syst in systs :
+        print syst
         yieldU = [0.,0.,0.,0.,0.]
         yieldD = [0.,0.,0.,0.,0.]
         yieldUIncl = 0.
@@ -191,6 +198,7 @@ for reg in listRegions:
             reweight_up.SetBinError(  i+1, err_variationUp)
             reweight_down.SetBinContent(i+1, variationDown)
             reweight_down.SetBinError(i+1, err_variationDown)
+            print syst, i, variationUp, "+-", err_variationUp, variationDown, "+-", err_variationDown
         reweight_up.Write()
         reweight_down.Write()
         variationUpIncl   = yieldUIncl/yieldNomIncl

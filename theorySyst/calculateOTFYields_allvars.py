@@ -14,8 +14,8 @@ from array import array
 # Incl, SRPhiHigh, CRWPhiHigh, CRZPhiHigh, SRPhiLow, CRWPhiLow, CRZPhiLow, SRNjet, CRWNjet, CRZNjet
 
 debug = True
-basePath = "/Users/othmanerifki/vbf/theoVariation_met160_020220"
-outPath = "./output/theoVariation_met160_020220"
+basePath = "./input/theoVariation"
+outPath = "./output/theoVariation"
 
 if not os.path.exists(outPath):
     os.makedirs(outPath)
@@ -30,12 +30,12 @@ print "\nRunning systs for channel:", channel, region
 # renofact, pdf, resum, ckkw
 
 theoUncUp= {     "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 theoUncDown= {   "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-#                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 
 binItrScale = 0
@@ -93,7 +93,7 @@ for reg in listRegions:
     # varied samples
     for key in ["qsf025", "qsf4", "ckkw15", "ckkw30"]:
         print "Not using", key
-'''
+
         inFile = TFile.Open(basePath+"/theoVariation_"+channel+"_"+key+".root")
         outFile = TFile(outPath+"/variedYields_"+channel+"_"+reg+".root", "update")
         thisHist = inFile.Get("jj_mass_" + reg + "_nominal")
@@ -104,7 +104,7 @@ for reg in listRegions:
         varDict[key].Write()
         inFile.Close()
         outFile.Close()
-'''
+
     ########################
     # Nominal
     ########################
@@ -307,7 +307,7 @@ for reg in listRegions:
     pdf_up.Write()
     pdf_down.Write()
 
-'''
+
     ########################
     # qsf/ckkw variations
     ########################
@@ -373,7 +373,7 @@ for reg in listRegions:
         theoUncDown[wVar][binItr[wVar]] = 1 - qsfckkwErrorIncl/qsfckkwYieldIncl
         qsfckkw_up.Write()
         qsfckkw_down.Write()
-'''
+
 inFile.Close()
 outFile.Close()
 
