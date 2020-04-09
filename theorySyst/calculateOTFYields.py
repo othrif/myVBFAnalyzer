@@ -1,3 +1,9 @@
+# Othmane Rifki
+# usage: python calculateOTFYields.py <channel> <region>
+# example: python calculateOTFYields.py Z_strong SR
+# Valid channels:  W_EWK, Z_EWK, W_strong, Z_strong
+# Valid regions: SR, CRW, CRZ
+#
 #!/usr/bin/env python
 
 import os
@@ -6,12 +12,6 @@ import math
 import subprocess
 from ROOT import *
 from array import array
-
-# usage: python calculateOTFYields.py Z_strong SR
-# Valid channels:
-# W_EWK, Z_EWK, W_strong, Z_strong
-# Valid regions:
-# Incl, SRPhiHigh, CRWPhiHigh, CRZPhiHigh, SRPhiLow, CRWPhiLow, CRZPhiLow, SRNjet, CRWNjet, CRZNjet
 
 debug = True
 basePath = "./input/theoryVariation/"
@@ -27,30 +27,25 @@ print "\nRunning systs for channel:", channel, region
 
 # bin1Low, bin2Low, bin3Low, bin1High, bin2High, bin3High, binNjet
 # up, down
-# renofact, pdf, resum, ckkw
+# renofact, pdf
 
 theoUncUp= {     "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "fac"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "renorm"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "both"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "fac"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "renorm"       : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "both"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 theoUncDown= {   "renofact"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "fac"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "renorm"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                 "both"     : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                "resum"        : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                "ckkw"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "fac"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "renorm"       : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                 "both"         : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                  "pdf"          : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}
 
 binItrScale = 0
 binItrPDF = 0
 binItr ={}
-binItr["resum"] = 0
-binItr["ckkw"] = 0
-#listRegions=[region + "PhiLow", region + "PhiHigh", region + "Njet"]
-listRegions=[region, region, region + "Njet"]
+
+listRegions=[region + "PhiLow", region + "PhiHigh", region + "Njet"]
+#listRegions=[region, region, region + "Njet"]
 if region == "Incl":
     listRegions=[region, region, region]
 for reg in listRegions:
